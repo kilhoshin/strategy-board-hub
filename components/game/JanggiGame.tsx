@@ -7,6 +7,8 @@ import type { Dictionary } from '@/lib/i18n/types';
 import {
   BoardFrame,
   GameLayout,
+  HintMarks,
+  HintPanel,
   LevelPicker,
   MoveLog,
   Panel,
@@ -79,6 +81,18 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
 
   const order = (i: number) => (flip ? ROWS * COLS - 1 - i : i);
   const cells = Array.from({ length: ROWS * COLS }, (_, k) => order(k));
+
+  /** Board-relative percentage of an intersection, honouring the flip. */
+  const at = (i: number): [number, number] => {
+    const slot = order(i);
+    return [px(slot % COLS), py(Math.floor(slot / COLS))];
+  };
+  const hintLabel = match.hint
+    ? match.hint.from < 0
+      ? dict.game.pass
+      : `${LABEL[j.jType(state.board[match.hint.from])][j.jOwner(state.board[match.hint.from]) - 1]} ` +
+        `${j.coordName(match.hint.from)}→${j.coordName(match.hint.to)}`
+    : null;
 
   const capturedByMe = state.captured.filter((p) => j.jOwner(p) !== mySide);
   const capturedByAi = state.captured.filter((p) => j.jOwner(p) === mySide);
@@ -198,6 +212,15 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
                 </button>
               );
             })}
+
+            {match.hint && match.hint.from >= 0 && (
+              <HintMarks
+                from={at(match.hint.from)}
+                to={at(match.hint.to)}
+                ratio={0.88}
+                label={`${dict.game.hints.suggestion} ${hintLabel ?? ''}`}
+              />
+            )}
           </div>
 
           <ResultOverlay
@@ -272,6 +295,7 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
       }
       sidebar={
         <>
+          <HintPanel dict={dict} controller={match} moveLabel={hintLabel} />
           <Panel title={dict.game.captured}>
             <div className="space-y-2">
               <CapturedRow pieces={capturedByMe} />

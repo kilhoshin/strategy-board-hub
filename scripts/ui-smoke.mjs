@@ -120,16 +120,16 @@ await page.locator('header button[aria-label]').first().click();
  * keep the same piece count, so those are verified through the move log.
  */
 const GAMES = [
-  { slug: 'gomoku', moves: ['H8'], probe: 'stones', want: 2 },
-  { slug: 'reversi', moves: ['e3'], probe: 'stones', want: 6 },
-  { slug: 'chess', moves: ['e2', 'e4'], probe: 'log', want: 1 },
-  { slug: 'janggi', moves: ['14', '15'], probe: 'log', want: 2 },
+  { slug: 'gomoku', moves: ['H8'], probe: 'stones', want: 2, hints: false },
+  { slug: 'reversi', moves: ['e3'], probe: 'stones', want: 6, hints: false },
+  { slug: 'chess', moves: ['e2', 'e4'], probe: 'log', want: 1, hints: true },
+  { slug: 'janggi', moves: ['14', '15'], probe: 'log', want: 2, hints: true },
   // 7七歩 -> 7六: files count right-to-left, ranks top-to-bottom.
-  { slug: 'shogi', moves: ['77', '76'], probe: 'log', want: 2 },
-  { slug: 'go', moves: ['E5'], probe: 'stones', want: 2 },
+  { slug: 'shogi', moves: ['77', '76'], probe: 'log', want: 2, hints: true },
+  { slug: 'go', moves: ['E5'], probe: 'stones', want: 2, hints: true },
 ];
 
-for (const { slug, moves, probe, want } of GAMES) {
+for (const { slug, moves, probe, want, hints } of GAMES) {
   consoleErrors.length = 0;
   await page.goto(`${BASE}/${slug}/`, { waitUntil: 'networkidle' });
 
@@ -167,6 +167,43 @@ for (const { slug, moves, probe, want } of GAMES) {
     consoleErrors.slice(0, 2).join(' | '),
   );
 
+  if (hints) {
+    const panel = page.locator('aside section', { has: page.locator('button[role="switch"]') });
+    check(`${slug}: hint panel present`, (await panel.count()) === 1);
+
+    // Wait for our turn again, then ask for a suggestion.
+    await page
+      .waitForFunction(() => {
+        const b = document.querySelector('aside button.btn-primary');
+        return b instanceof HTMLButtonElement && !b.disabled;
+      }, undefined, { timeout: 25000 })
+      .catch(() => {});
+    await panel.locator('button.btn-primary').click();
+
+    const shown = await page
+      .waitForSelector('main svg[role="img"]', { timeout: 25000 })
+      .then(() => true)
+      .catch(() => false);
+    check(`${slug}: hint drawn on board`, shown);
+
+    // The caveat must be visible whenever a suggestion is.
+    const caveat = await panel.locator('p', { hasText: /.{40,}/ }).last().innerText();
+    check(`${slug}: hint disclaimer shown`, caveat.length > 40);
+
+    if (SHOTS) {
+      await page.waitForTimeout(600);
+      await page.screenshot({ path: join(SHOT_DIR, `hint-${slug}.png`) });
+    }
+
+    // Switching hints off must remove both the control and the overlay.
+    await panel.locator('button[role="switch"]').click();
+    const gone =
+      (await panel.locator('button.btn-primary').count()) === 0 &&
+      (await page.locator('main svg[role="img"]').count()) === 0;
+    check(`${slug}: hints can be turned off`, gone);
+    await panel.locator('button[role="switch"]').click();
+  }
+
   if (SHOTS) {
     // Let drop-in animations and scroll reveals settle before capturing.
     await page.waitForTimeout(1200);
@@ -186,7 +223,8 @@ for (const path of ['/ja/', '/ko/janggi/', '/zh/go/']) {
   check(`mobile ${path}: no horizontal overflow`, !overflows);
   if (SHOTS) {
     await phone.waitForTimeout(1200);
-    await phone.screenshot({ path: join(SHOT_DIR, `mobile${path.replace(/\//g, '-')}png`) });
+    const name = path.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home';
+    await phone.screenshot({ path: join(SHOT_DIR, `mobile-${name}.png`) });
   }
 }
 await phone.close();

@@ -460,6 +460,12 @@ function packMove(state: ChessState, move: ChessMove): number | null {
   return null;
 }
 
+/** Algebraic notation for a legal move, e.g. "Nf3" or "exd5+". */
+export function describeMove(state: ChessState, move: ChessMove): string {
+  const mv = packMove(state, move);
+  return mv === null ? '' : toSan(state, mv);
+}
+
 export function apply(state: ChessState, move: ChessMove): ChessState {
   const mv = packMove(state, move);
   if (mv === null) return state;

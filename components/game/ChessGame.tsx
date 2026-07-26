@@ -7,6 +7,8 @@ import type { Dictionary } from '@/lib/i18n/types';
 import {
   BoardFrame,
   GameLayout,
+  HintMarks,
+  HintPanel,
   LevelPicker,
   Panel,
   ResultOverlay,
@@ -109,6 +111,14 @@ export function ChessGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
   const rows = flip ? [7, 6, 5, 4, 3, 2, 1, 0] : [0, 1, 2, 3, 4, 5, 6, 7];
   const cols = flip ? [7, 6, 5, 4, 3, 2, 1, 0] : [0, 1, 2, 3, 4, 5, 6, 7];
 
+  /** Board-relative percentage of a square's centre, honouring the flip. */
+  const at = (sq: number): [number, number] => {
+    const r = rows.indexOf(c.sqRank(sq));
+    const f = cols.indexOf(c.sqFile(sq));
+    return [(100 * (f + 0.5)) / 8, (100 * (r + 0.5)) / 8];
+  };
+  const hintLabel = match.hint ? c.describeMove(state, match.hint) : null;
+
   return (
     <GameLayout
       status={
@@ -190,6 +200,14 @@ export function ChessGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
                 }),
               )}
             </div>
+
+            {match.hint && (
+              <HintMarks
+                from={at(match.hint.from)}
+                to={at(match.hint.to)}
+                label={`${dict.game.hints.suggestion} ${hintLabel ?? ''}`}
+              />
+            )}
           </div>
 
           {promo && (
@@ -268,6 +286,7 @@ export function ChessGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
       }
       sidebar={
         <>
+          <HintPanel dict={dict} controller={match} moveLabel={hintLabel} />
           <Panel title={dict.game.captured}>
             <div className="space-y-2 text-2xl leading-none">
               <div className="min-h-7" style={{ color: '#16120c', textShadow: '0 0 1.2px #d8c9ae' }}>

@@ -130,6 +130,19 @@ export const en: Dictionary = {
       quiet: 'No capture for a long time',
       area: 'Counted by area',
     },
+    hints: {
+      title: 'AI suggestion',
+      enable: 'Show AI suggestions',
+      show: 'Suggest a move',
+      thinking: 'Working it out…',
+      suggestion: 'It would play',
+      hide: 'Hide',
+      none: 'No move to suggest here.',
+      offNote:
+        'Suggestions are off. Flip the switch if you would like a nudge — it stays off until you turn it back on.',
+      disclaimer:
+        'This is the same limited engine you are playing against, thinking for a few seconds in your browser. It is often useful and it is regularly wrong — treat it as a second opinion, not the answer.',
+    },
     promotePrompt: 'Promote?',
     promoteYes: 'Promote',
     promoteNo: 'Stay',

@@ -7,9 +7,10 @@ import type { Dictionary } from '@/lib/i18n/types';
 import {
   BoardFrame,
   GameLayout,
+  HintMarks,
+  HintPanel,
   LevelPicker,
   MoveLog,
-  Panel,
   ResultOverlay,
   SidePicker,
   StatusBar,
@@ -70,6 +71,13 @@ export function ShogiGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
 
   const order = (k: number) => (flip ? N * N - 1 - k : k);
   const cells = Array.from({ length: N * N }, (_, k) => order(k));
+
+  /** Board-relative percentage of a square's centre, honouring the flip. */
+  const at = (i: number): [number, number] => {
+    const slot = order(i);
+    return [pct(slot % N), pct(Math.floor(slot / N))];
+  };
+  const hintLabel = match.hint ? s.moveLabel(state, match.hint) : null;
 
   return (
     <GameLayout
@@ -200,6 +208,15 @@ export function ShogiGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
                   </button>
                 );
               })}
+
+              {match.hint && (
+                <HintMarks
+                  // A drop has no origin square — only the destination is marked.
+                  from={match.hint.from >= 0 ? at(match.hint.from) : null}
+                  to={at(match.hint.to)}
+                  label={`${dict.game.hints.suggestion} ${hintLabel ?? ''}`}
+                />
+              )}
             </div>
 
             {promo && (
@@ -300,7 +317,12 @@ export function ShogiGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
           </div>
         </>
       }
-      sidebar={<MoveLog entries={state.log} title={dict.game.moveLog} />}
+      sidebar={
+        <>
+          <HintPanel dict={dict} controller={match} moveLabel={hintLabel} />
+          <MoveLog entries={state.log} title={dict.game.moveLog} />
+        </>
+      }
     />
   );
 }

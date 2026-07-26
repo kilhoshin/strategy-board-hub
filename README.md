@@ -63,6 +63,26 @@ a 9×9 Go board. It is a browser, not a data centre.
 yielding a frame) if the worker cannot be created. This keeps a four-second Go ponder from
 freezing the page.
 
+### AI hints
+
+Chess, Janggi, shogi and Go carry an on-demand **AI suggestion** panel. Asking for one runs
+the same bounded search that plays the opponent, at the player's current difficulty, and draws
+the answer straight onto the board: a pulsing ring on the destination, a fainter dashed ring on
+the origin, and a gold arrow between them. Drops (shogi) and passes (Go) mark only the target.
+
+Two deliberate choices:
+
+- **It can be switched off.** A toggle in the panel hides the control entirely and clears any
+  visible suggestion; the preference persists in `localStorage`, so a player who does not want
+  help never sees it again.
+- **It says it can be wrong.** The disclaimer sits under the button in every locale and is not
+  hedging — this is a few seconds of shallow browser search, so it is useful often and wrong
+  regularly. It is presented as a second opinion, never as the answer.
+
+Hints run with `silent: true` so the status line still reads "your move" rather than pretending
+the opponent is thinking, and a suggestion is discarded if the player moves on before it lands.
+The easy boards (Gomoku, Reversi) deliberately have no hint — they do not need one.
+
 ### Boards (`components/game/`)
 
 `useMatch.ts` holds position history, drives the AI whenever it is its turn, and keeps undo

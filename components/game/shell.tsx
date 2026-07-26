@@ -111,6 +111,225 @@ export function SidePicker({
   );
 }
 
+/* --------------------------------- hints ---------------------------------- */
+
+export interface HintController {
+  hintsEnabled: boolean;
+  setHintsEnabled: (on: boolean) => void;
+  hintLoading: boolean;
+  hintEmpty: boolean;
+  requestHint: () => void;
+  clearHint: () => void;
+  canHint: boolean;
+}
+
+/**
+ * On-demand advice panel. The suggestion comes from the same bounded search
+ * that plays the opponent, so the disclaimer is not boilerplate — it is the
+ * literal truth about how good this advice is.
+ */
+export function HintPanel({
+  dict,
+  controller,
+  /** Human-readable notation for the current suggestion, if there is one. */
+  moveLabel,
+}: {
+  dict: Dictionary;
+  controller: HintController;
+  moveLabel?: string | null;
+}) {
+  const h = dict.game.hints;
+  const { hintsEnabled, setHintsEnabled, hintLoading, hintEmpty, canHint } = controller;
+
+  return (
+    <section className="panel overflow-hidden">
+      <div className="flex items-center justify-between gap-3 px-4 pt-4">
+        <h3 className="eyebrow !text-[var(--accent)]">{h.title}</h3>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={hintsEnabled}
+          aria-label={h.enable}
+          onClick={() => setHintsEnabled(!hintsEnabled)}
+          className={`relative h-6 w-11 shrink-0 rounded-full border transition-colors duration-300 ${
+            hintsEnabled
+              ? 'border-transparent bg-[linear-gradient(180deg,var(--color-gold-400),var(--color-gold-600))]'
+              : 'border-[var(--hairline-strong)] bg-[var(--surface)]'
+          }`}
+        >
+          <span
+            className={`absolute top-0.5 h-5 w-5 rounded-full shadow-md transition-transform duration-300 ${
+              hintsEnabled
+                ? 'translate-x-[1.375rem] bg-[#2a1e08]'
+                : 'translate-x-0.5 bg-[var(--fg-muted)]'
+            }`}
+          />
+        </button>
+      </div>
+
+      {!hintsEnabled ? (
+        <p className="px-4 pb-4 pt-3 text-[0.7rem] leading-relaxed text-[var(--fg-muted)]">
+          {h.offNote}
+        </p>
+      ) : (
+        <div className="px-4 pb-4 pt-3">
+          <button
+            type="button"
+            onClick={controller.requestHint}
+            disabled={!canHint}
+            className="btn btn-primary w-full !py-3 text-sm"
+          >
+            {hintLoading ? (
+              <>
+                <span className="thinking-bar relative h-[2px] w-10 overflow-hidden rounded-full bg-black/25" />
+                {h.thinking}
+              </>
+            ) : (
+              <>
+                <span aria-hidden="true">✦</span>
+                {h.show}
+              </>
+            )}
+          </button>
+
+          {moveLabel && (
+            <div className="mt-3 rounded-xl border border-[rgba(232,194,116,0.35)] bg-[var(--accent-soft)] p-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[0.65rem] uppercase tracking-[0.18em] text-[var(--fg-muted)]">
+                  {h.suggestion}
+                </span>
+                <button
+                  type="button"
+                  onClick={controller.clearHint}
+                  className="text-[0.7rem] text-[var(--fg-muted)] underline underline-offset-2 transition-colors hover:text-[var(--fg)]"
+                >
+                  {h.hide}
+                </button>
+              </div>
+              <p className="display mt-1 text-2xl text-[var(--accent)]">{moveLabel}</p>
+            </div>
+          )}
+
+          {hintEmpty && (
+            <p className="mt-3 text-xs text-[var(--fg-muted)]">{h.none}</p>
+          )}
+
+          <p className="mt-3 flex gap-2 text-[0.7rem] leading-relaxed text-[var(--fg-muted)]">
+            <span aria-hidden="true" className="shrink-0 opacity-70">
+              ⚠
+            </span>
+            <span>{h.disclaimer}</span>
+          </p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/**
+ * The suggestion drawn on the board itself: a pulsing ring on the destination,
+ * a fainter one on the origin, and an arrow between them. Coordinates are
+ * percentages of the board's inner area; `ratio` is its width / height so the
+ * arrowhead stays square on non-square boards.
+ */
+export function HintMarks({
+  from,
+  to,
+  ratio = 1,
+  label,
+}: {
+  from?: [number, number] | null;
+  to: [number, number];
+  ratio?: number;
+  label?: string;
+}) {
+  const w = 100 * ratio;
+  const tx = to[0] * ratio;
+  const ty = to[1];
+
+  let shaft: { x1: number; y1: number; x2: number; y2: number; angle: number } | null = null;
+  if (from) {
+    const fx = from[0] * ratio;
+    const fy = from[1];
+    const dx = tx - fx;
+    const dy = ty - fy;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    // Pull both ends clear of the rings.
+    const pad = Math.min(3.4, len / 3);
+    shaft = {
+      x1: fx + ux * pad,
+      y1: fy + uy * pad,
+      x2: tx - ux * pad * 1.6,
+      y2: ty - uy * pad * 1.6,
+      angle: (Math.atan2(dy, dx) * 180) / Math.PI,
+    };
+  }
+
+  return (
+    <svg
+      viewBox={`0 0 ${w} 100`}
+      className="pointer-events-none absolute inset-0 z-10 h-full w-full"
+      aria-label={label}
+      role="img"
+    >
+      <defs>
+        <filter id="hint-glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="1.2" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <g filter="url(#hint-glow)">
+        {shaft && (
+          <>
+            <circle
+              cx={from![0] * ratio}
+              cy={from![1]}
+              r="3.1"
+              fill="none"
+              stroke="#f5d99b"
+              strokeWidth="0.9"
+              strokeDasharray="1.6 1.2"
+              opacity="0.85"
+            />
+            <line
+              x1={shaft.x1}
+              y1={shaft.y1}
+              x2={shaft.x2}
+              y2={shaft.y2}
+              stroke="#f5d99b"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              opacity="0.95"
+            />
+            <polygon
+              points="0,-2.1 4.2,0 0,2.1"
+              fill="#f5d99b"
+              transform={`translate(${tx} ${ty}) rotate(${shaft.angle}) translate(-4.4 0)`}
+            />
+          </>
+        )}
+
+        <circle cx={tx} cy={ty} r="4" fill="none" stroke="#f5d99b" strokeWidth="1.6">
+          <animate attributeName="r" values="4;5.2;4" dur="1.6s" repeatCount="indefinite" />
+          <animate
+            attributeName="opacity"
+            values="1;0.45;1"
+            dur="1.6s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx={tx} cy={ty} r="1.1" fill="#f5d99b" opacity="0.9" />
+      </g>
+    </svg>
+  );
+}
+
 /* ------------------------------- status bar ------------------------------- */
 
 export function StatusBar({

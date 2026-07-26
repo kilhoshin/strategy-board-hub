@@ -28,7 +28,22 @@ export interface Match<S, M> {
   undo: () => void;
   reset: (nextState?: S) => void;
   canUndo: boolean;
+
+  /* --- AI hint --------------------------------------------------------- */
+  /** Whether the hint control is offered at all; persisted per browser. */
+  hintsEnabled: boolean;
+  setHintsEnabled: (on: boolean) => void;
+  /** The current suggestion, or null when none has been asked for. */
+  hint: M | null;
+  hintLoading: boolean;
+  /** True once a hint was requested but the engine had nothing to offer. */
+  hintEmpty: boolean;
+  requestHint: () => void;
+  clearHint: () => void;
+  canHint: boolean;
 }
+
+const HINT_PREF_KEY = 'sbh-hints';
 
 /**
  * Shared match loop: holds the position history, drives the AI whenever it is
@@ -48,7 +63,15 @@ export function useMatch<S, M>({
   const { think, thinking } = useEngine();
   const busy = useRef(false);
 
+  const [hintsEnabled, setHintsEnabledState] = useState(true);
+  const [hint, setHint] = useState<M | null>(null);
+  const [hintLoading, setHintLoading] = useState(false);
+  const [hintEmpty, setHintEmpty] = useState(false);
+
   const state = history[history.length - 1];
+  /** Lets async hint callbacks tell whether the position has moved on. */
+  const latest = useRef(state);
+  latest.current = state;
   const result = outcome(state);
   const myTurn = turn(state) === mySide && !result.over;
 
@@ -121,6 +144,60 @@ export function useMatch<S, M>({
     [create],
   );
 
+  /* ------------------------------ AI hint ------------------------------ */
+
+  useEffect(() => {
+    try {
+      setHintsEnabledState(window.localStorage.getItem(HINT_PREF_KEY) !== 'off');
+    } catch {
+      /* private mode — keep the default */
+    }
+  }, []);
+
+  const setHintsEnabled = useCallback((on: boolean) => {
+    setHintsEnabledState(on);
+    if (!on) {
+      setHint(null);
+      setHintEmpty(false);
+    }
+    try {
+      window.localStorage.setItem(HINT_PREF_KEY, on ? 'on' : 'off');
+    } catch {
+      /* nothing to persist to */
+    }
+  }, []);
+
+  const clearHint = useCallback(() => {
+    setHint(null);
+    setHintEmpty(false);
+  }, []);
+
+  // A suggestion is only about the position it was computed for.
+  useEffect(() => {
+    setHint(null);
+    setHintEmpty(false);
+  }, [state]);
+
+  const canHint = hintsEnabled && myTurn && !thinking && !hintLoading;
+
+  const requestHint = useCallback(() => {
+    if (!canHint) return;
+    const forState = state;
+    setHintLoading(true);
+    setHintEmpty(false);
+    (async () => {
+      // The advisor is the same engine as the opponent, at the same level —
+      // which is exactly why the UI says it can be wrong.
+      const move = await think<M>(game, forState, level, { silent: true });
+      setHintLoading(false);
+      // Ignore a suggestion the player has already moved past.
+      if (latest.current !== forState) return;
+      if (move === null || move === undefined) setHintEmpty(true);
+      else setHint(move);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canHint, state, game, level]);
+
   return {
     state,
     history,
@@ -135,5 +212,13 @@ export function useMatch<S, M>({
     undo,
     reset,
     canUndo: history.length > 1 && !thinking,
+    hintsEnabled,
+    setHintsEnabled,
+    hint,
+    hintLoading,
+    hintEmpty,
+    requestHint,
+    clearHint,
+    canHint,
   };
 }

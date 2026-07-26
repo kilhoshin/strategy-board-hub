@@ -6,6 +6,8 @@ import type { Dictionary } from '@/lib/i18n/types';
 import {
   BoardFrame,
   GameLayout,
+  HintMarks,
+  HintPanel,
   LevelPicker,
   Panel,
   ResultOverlay,
@@ -39,6 +41,10 @@ export function GoGame({ dict, hubHref }: { dict: Dictionary; hubHref: string })
 
   const stars = go.STAR_POINTS[n as go.GoSize] ?? [];
   const stoneSize = n <= 9 ? 92 : n <= 13 ? 94 : 96;
+
+  const hint = match.hint;
+  const hintLabel =
+    hint === null ? null : hint === go.PASS ? dict.game.pass : go.coordName(n, hint);
 
   return (
     <GameLayout
@@ -153,6 +159,13 @@ export function GoGame({ dict, hubHref }: { dict: Dictionary; hubHref: string })
                 </button>
               );
             })}
+
+            {hint !== null && hint !== go.PASS && (
+              <HintMarks
+                to={[pct(hint % n), pct(Math.floor(hint / n))]}
+                label={`${dict.game.hints.suggestion} ${hintLabel ?? ''}`}
+              />
+            )}
           </div>
 
           <ResultOverlay
@@ -225,23 +238,26 @@ export function GoGame({ dict, hubHref }: { dict: Dictionary; hubHref: string })
         </>
       }
       sidebar={
-        <Panel title={dict.game.score}>
-          <dl className="space-y-1.5 text-xs">
-            <Row label={dict.game.komi} value={state.komi.toFixed(1)} />
-            <Row label={`${dict.game.black} ${dict.game.captured}`} value={state.captured[1]} />
-            <Row label={`${dict.game.white} ${dict.game.captured}`} value={state.captured[2]} />
-            {score && (
-              <>
-                <div className="rule my-2" />
-                <Row label={dict.game.black} value={score.black} />
-                <Row label={dict.game.white} value={score.white.toFixed(1)} />
-              </>
-            )}
-          </dl>
-          <p className="mt-3 text-[0.7rem] leading-relaxed text-[var(--fg-muted)]">
-            {dict.game.scoringNote}
-          </p>
-        </Panel>
+        <>
+          <HintPanel dict={dict} controller={match} moveLabel={hintLabel} />
+          <Panel title={dict.game.score}>
+            <dl className="space-y-1.5 text-xs">
+              <Row label={dict.game.komi} value={state.komi.toFixed(1)} />
+              <Row label={`${dict.game.black} ${dict.game.captured}`} value={state.captured[1]} />
+              <Row label={`${dict.game.white} ${dict.game.captured}`} value={state.captured[2]} />
+              {score && (
+                <>
+                  <div className="rule my-2" />
+                  <Row label={dict.game.black} value={score.black} />
+                  <Row label={dict.game.white} value={score.white.toFixed(1)} />
+                </>
+              )}
+            </dl>
+            <p className="mt-3 text-[0.7rem] leading-relaxed text-[var(--fg-muted)]">
+              {dict.game.scoringNote}
+            </p>
+          </Panel>
+        </>
       }
     />
   );

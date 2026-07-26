@@ -111,6 +111,23 @@ export interface Dictionary {
     playAgain: string;
     tryAnother: string;
     reasons: Record<string, string>;
+    /** On-demand AI advice, offered on the harder boards. */
+    hints: {
+      title: string;
+      /** Accessible label for the on/off switch. */
+      enable: string;
+      show: string;
+      thinking: string;
+      /** Label above the suggested move. */
+      suggestion: string;
+      hide: string;
+      /** Shown when the engine returns no move at all. */
+      none: string;
+      /** Shown in place of the button when hints are switched off. */
+      offNote: string;
+      /** The honest caveat about how strong this advice really is. */
+      disclaimer: string;
+    };
     promotePrompt: string;
     promoteYes: string;
     promoteNo: string;

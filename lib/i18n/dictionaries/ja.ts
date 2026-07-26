@@ -130,6 +130,19 @@ export const ja: Dictionary = {
       quiet: '長らく駒の取り合いがありません',
       area: '地の広さで判定',
     },
+    hints: {
+      title: 'AIの候補手',
+      enable: 'AIの候補手を表示',
+      show: '候補手を見る',
+      thinking: '考慮中…',
+      suggestion: 'AIならこの手',
+      hide: '隠す',
+      none: '示せる手がありません。',
+      offNote:
+        '候補手は非表示です。手助けが要るときはスイッチを入れてください。戻すまで非表示のままになります。',
+      disclaimer:
+        'いま対局している同じエンジンが、ブラウザ内で数秒だけ考えた結果です。役に立つことも多いですが、外すことも珍しくありません。正解ではなく参考意見として扱ってください。',
+    },
     promotePrompt: '成りますか？',
     promoteYes: '成る',
     promoteNo: '不成',

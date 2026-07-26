@@ -131,6 +131,19 @@ export const ko: Dictionary = {
       quiet: '오랫동안 기물을 잡지 못했습니다',
       area: '집 수로 판정',
     },
+    hints: {
+      title: 'AI 추천',
+      enable: 'AI 추천 표시',
+      show: '추천 수 보기',
+      thinking: '추천 수 계산 중…',
+      suggestion: 'AI라면 이렇게',
+      hide: '감추기',
+      none: '추천할 수 있는 수가 없습니다.',
+      offNote:
+        '추천이 꺼져 있습니다. 도움이 필요하면 스위치를 켜세요. 다시 켤 때까지 계속 꺼진 상태로 유지됩니다.',
+      disclaimer:
+        '지금 상대하고 있는 그 엔진이 브라우저에서 몇 초 생각한 결과입니다. 도움이 될 때도 많지만 틀릴 때도 많습니다. 정답이 아니라 참고 의견으로 봐주세요.',
+    },
     promotePrompt: '승진하시겠습니까?',
     promoteYes: '승진',
     promoteNo: '그대로',

@@ -39,8 +39,14 @@ export function useEngine() {
   }, []);
 
   const think = useCallback(
-    async <T,>(game: GameId, state: unknown, level: Level): Promise<T | null> => {
-      setThinking(true);
+    async <T,>(
+      game: GameId,
+      state: unknown,
+      level: Level,
+      /** Hint lookups pass `silent` so they do not read as "the AI is moving". */
+      options: { silent?: boolean } = {},
+    ): Promise<T | null> => {
+      if (!options.silent) setThinking(true);
       try {
         const worker = workerRef.current;
         if (worker) {
@@ -56,7 +62,7 @@ export function useEngine() {
         await new Promise((r) => setTimeout(r, 30));
         return solve({ game, level, state }) as T | null;
       } finally {
-        setThinking(false);
+        if (!options.silent) setThinking(false);
       }
     },
     [],

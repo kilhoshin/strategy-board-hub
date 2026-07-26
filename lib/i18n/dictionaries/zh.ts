@@ -130,6 +130,18 @@ export const zh: Dictionary = {
       quiet: '長時間未吃子',
       area: '以子地判定',
     },
+    hints: {
+      title: 'AI 建議',
+      enable: '顯示 AI 建議',
+      show: '看看建議的一手',
+      thinking: '計算中…',
+      suggestion: 'AI 會這樣下',
+      hide: '隱藏',
+      none: '這裡沒有可以建議的一手。',
+      offNote: '建議已關閉。需要提示時再打開開關，在你重新開啟之前都會保持關閉。',
+      disclaimer:
+        '這是你正在對弈的同一個引擎，在瀏覽器裡想了幾秒鐘的結果。它常常有用，也常常會錯。請把它當成第二意見，而不是標準答案。',
+    },
     promotePrompt: '要升變嗎？',
     promoteYes: '升變',
     promoteNo: '不變',
