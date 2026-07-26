@@ -1,9 +1,19 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as j from '@/lib/games/janggi';
 import type { Side } from '@/lib/games/types';
 import type { Dictionary } from '@/lib/i18n/types';
+import {
+  JanggiChip,
+  JanggiPiece,
+  LETTER,
+  PIECE_KEY,
+  PIECE_ORDER,
+  SIZE,
+  type ColorScheme,
+  type PieceStyle,
+} from './JanggiPiece';
 import {
   BoardFrame,
   GameLayout,
@@ -13,6 +23,7 @@ import {
   MoveLog,
   Panel,
   ResultOverlay,
+  SegmentedControl,
   SidePicker,
   StatusBar,
 } from './shell';
@@ -22,31 +33,46 @@ const COLS = 9;
 const ROWS = 10;
 const px = (c: number) => (100 * (c + 0.5)) / COLS;
 const py = (r: number) => (100 * (r + 0.5)) / ROWS;
+/** Inner board is inset 6% horizontally and 5% vertically of a 9:10 frame. */
+const BOARD_RATIO = 0.88;
 
-/** Cho (side 1) uses the green seal script, Han (side 2) the red. */
-const LABEL: Record<number, [string, string]> = {
-  [j.GENERAL]: ['楚', '漢'],
-  [j.GUARD]: ['士', '士'],
-  [j.ELEPHANT]: ['象', '象'],
-  [j.HORSE]: ['馬', '馬'],
-  [j.CHARIOT]: ['車', '車'],
-  [j.CANNON]: ['包', '包'],
-  [j.SOLDIER]: ['卒', '兵'],
-};
-
-const SIZE: Record<number, number> = {
-  [j.GENERAL]: 1.18,
-  [j.CHARIOT]: 1,
-  [j.CANNON]: 1,
-  [j.HORSE]: 0.94,
-  [j.ELEPHANT]: 0.94,
-  [j.GUARD]: 0.84,
-  [j.SOLDIER]: 0.84,
-};
+const STYLE_KEY = 'sbh-janggi-style';
+const COLOR_KEY = 'sbh-janggi-colors';
 
 export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: string }) {
   const [setup, setSetup] = useState<j.Setup>('inner');
   const [from, setFrom] = useState<number | null>(null);
+  const [style, setStyle] = useState<PieceStyle>(dict.game.defaultPieceStyle);
+  const [scheme, setScheme] = useState<ColorScheme>('traditional');
+
+  // Presentation is a personal preference, so it outlives the session.
+  useEffect(() => {
+    try {
+      const s = window.localStorage.getItem(STYLE_KEY);
+      if (s === 'hanja' || s === 'icon' || s === 'letter') setStyle(s);
+      const c = window.localStorage.getItem(COLOR_KEY);
+      if (c === 'traditional' || c === 'mono') setScheme(c);
+    } catch {
+      /* private mode — keep the locale default */
+    }
+  }, []);
+
+  const chooseStyle = (next: PieceStyle) => {
+    setStyle(next);
+    try {
+      window.localStorage.setItem(STYLE_KEY, next);
+    } catch {
+      /* nothing to persist to */
+    }
+  };
+  const chooseScheme = (next: ColorScheme) => {
+    setScheme(next);
+    try {
+      window.localStorage.setItem(COLOR_KEY, next);
+    } catch {
+      /* nothing to persist to */
+    }
+  };
 
   const match = useMatch<j.JanggiState, j.JanggiMove>({
     game: 'janggi',
@@ -67,6 +93,11 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
     () => new Set(legal.filter((m) => m.from === from).map((m) => m.to)),
     [legal, from],
   );
+  /** Pieces that are shutting down a leg of the selected horse or elephant. */
+  const blockers = useMemo(
+    () => (from === null ? new Set<number>() : new Set(j.blockedLegs(state.board, from))),
+    [state.board, from],
+  );
   const check = useMemo(() => j.inCheck(state.board, state.turn), [state]);
 
   const onPoint = (i: number) => {
@@ -82,16 +113,21 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
   const order = (i: number) => (flip ? ROWS * COLS - 1 - i : i);
   const cells = Array.from({ length: ROWS * COLS }, (_, k) => order(k));
 
-  /** Board-relative percentage of an intersection, honouring the flip. */
   const at = (i: number): [number, number] => {
     const slot = order(i);
     return [px(slot % COLS), py(Math.floor(slot / COLS))];
   };
+
+  const nameOf = (piece: number) => {
+    const key = PIECE_KEY[j.jType(piece)];
+    if (!key) return '';
+    return style === 'letter' ? LETTER[j.jType(piece)] : dict.game.pieces[key].name;
+  };
+
   const hintLabel = match.hint
     ? match.hint.from < 0
       ? dict.game.pass
-      : `${LABEL[j.jType(state.board[match.hint.from])][j.jOwner(state.board[match.hint.from]) - 1]} ` +
-        `${j.coordName(match.hint.from)}→${j.coordName(match.hint.to)}`
+      : `${nameOf(state.board[match.hint.from])} ${j.coordName(match.hint.from)}→${j.coordName(match.hint.to)}`
     : null;
 
   const capturedByMe = state.captured.filter((p) => j.jOwner(p) !== mySide);
@@ -151,7 +187,12 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
                 />
               ))}
               {[0, 7].map((top) => (
-                <g key={top} stroke="var(--wood-line)" strokeWidth="0.35" vectorEffect="non-scaling-stroke">
+                <g
+                  key={top}
+                  stroke="var(--wood-line)"
+                  strokeWidth="0.35"
+                  vectorEffect="non-scaling-stroke"
+                >
                   <line x1={px(3)} y1={py(top)} x2={px(5)} y2={py(top + 2)} />
                   <line x1={px(5)} y1={py(top)} x2={px(3)} y2={py(top + 2)} />
                 </g>
@@ -159,15 +200,14 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
             </svg>
 
             {cells.map((i, slot) => {
-              const r = Math.floor(i / COLS);
-              const cIdx = i % COLS;
               const dr = Math.floor(slot / COLS);
               const dc = slot % COLS;
               const piece = state.board[i];
-              const owner = piece ? j.jOwner(piece) : null;
               const isTarget = targets.has(i);
               const isFrom = from === i;
+              const isBlocker = blockers.has(i);
               const lastTo = state.last?.to === i;
+              const size = piece ? SIZE[j.jType(piece)] : 1;
 
               return (
                 <button
@@ -184,29 +224,44 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
                   }}
                 >
                   {isTarget && !piece && (
-                    <span className="pointer-events-none block h-[24%] w-[24%] rounded-full bg-[#3d2508]/45" />
+                    <span className="pointer-events-none block h-[30%] w-[30%] rounded-full bg-[#3d2508]/50 ring-2 ring-[#3d2508]/25" />
                   )}
-                  {piece !== 0 && owner && (
+
+                  {piece !== 0 && (
                     <span
-                      className={`placed relative flex items-center justify-center rounded-[22%] border-2 font-bold leading-none transition-transform duration-200 ${
-                        owner === 1
-                          ? 'border-[#1f6f4f] text-[#155c40]'
-                          : 'border-[#b83c2c] text-[#a8321f]'
-                      } ${isFrom ? 'scale-110 ring-2 ring-[var(--color-gold-400)]' : ''} ${
-                        lastTo ? 'last-move' : ''
-                      } ${isTarget ? 'ring-2 ring-[var(--color-vermilion-500)]' : ''}`}
-                      style={{
-                        width: `${SIZE[j.jType(piece)] * 92}%`,
-                        height: `${SIZE[j.jType(piece)] * 92}%`,
-                        fontSize: `${(SIZE[j.jType(piece)] * 5.2).toFixed(2)}cqw`,
-                        background:
-                          'radial-gradient(circle at 34% 26%, #fdf4dd, #edd9ac 62%, #d8bd85)',
-                        boxShadow: '0 3px 6px rgba(0,0,0,0.42)',
-                        clipPath:
-                          'polygon(28% 0,72% 0,100% 28%,100% 72%,72% 100%,28% 100%,0 72%,0 28%)',
-                      }}
+                      className={`placed relative flex items-center justify-center transition-transform duration-200 ${
+                        isFrom ? 'scale-110' : ''
+                      } ${lastTo ? 'last-move rounded-[22%]' : ''}`}
+                      style={{ width: `${size * 92}%`, height: `${size * 92}%` }}
                     >
-                      {LABEL[j.jType(piece)][owner - 1]}
+                      <JanggiPiece piece={piece} style={style} scheme={scheme} size={size} />
+                      {isFrom && (
+                        <span className="pointer-events-none absolute -inset-[12%] rounded-[26%] ring-2 ring-[var(--color-gold-400)]" />
+                      )}
+                      {isTarget && (
+                        <span className="pointer-events-none absolute -inset-[14%] rounded-full ring-[3px] ring-[var(--color-vermilion-500)]" />
+                      )}
+                    </span>
+                  )}
+
+                  {/* The blocked leg (멱): the point stopping a horse or
+                      elephant. Western players consistently miss this, so it is
+                      marked explicitly — as a corner badge, so the piece it
+                      sits on stays readable. */}
+                  {isBlocker && (
+                    <span
+                      className="pointer-events-none absolute right-[6%] top-[4%] block h-[34%] w-[34%]"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 24 24" className="h-full w-full drop-shadow">
+                        <circle cx="12" cy="12" r="11" fill="#cf5540" stroke="#fff" strokeWidth="2" />
+                        <path
+                          d="M8.4 8.4l7.2 7.2M15.6 8.4l-7.2 7.2"
+                          stroke="#fff"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                        />
+                      </svg>
                     </span>
                   )}
                 </button>
@@ -217,7 +272,7 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
               <HintMarks
                 from={at(match.hint.from)}
                 to={at(match.hint.to)}
-                ratio={0.88}
+                ratio={BOARD_RATIO}
                 label={`${dict.game.hints.suggestion} ${hintLabel ?? ''}`}
               />
             )}
@@ -248,6 +303,27 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
             firstLabel={`${dict.game.cho} · ${dict.game.playFirst}`}
             secondLabel={`${dict.game.han} · ${dict.game.playSecond}`}
           />
+
+          <SegmentedControl
+            label={dict.game.pieceStyle}
+            value={style}
+            onChange={chooseStyle}
+            options={[
+              { value: 'hanja', label: dict.game.pieceStyles.hanja },
+              { value: 'icon', label: dict.game.pieceStyles.icon },
+              { value: 'letter', label: dict.game.pieceStyles.letter },
+            ]}
+          />
+          <SegmentedControl
+            label={dict.game.colorScheme}
+            value={scheme}
+            onChange={chooseScheme}
+            options={[
+              { value: 'traditional', label: dict.game.colorSchemes.traditional },
+              { value: 'mono', label: dict.game.colorSchemes.mono },
+            ]}
+          />
+
           <div>
             <div className="eyebrow mb-2">{dict.game.setup}</div>
             <select
@@ -267,6 +343,7 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
               ))}
             </select>
           </div>
+
           <div className="grid grid-cols-3 gap-2">
             <button type="button" className="btn !px-2 text-xs" onClick={() => match.reset()}>
               {dict.game.newGame}
@@ -296,12 +373,40 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
       sidebar={
         <>
           <HintPanel dict={dict} controller={match} moveLabel={hintLabel} />
+
+          <Panel title={dict.game.legend}>
+            <ul className="space-y-2.5">
+              {PIECE_ORDER.map((type) => {
+                const key = PIECE_KEY[type];
+                return (
+                  <li key={type} className="flex gap-2.5">
+                    <JanggiChip
+                      piece={type | (mySide === 2 ? 8 : 0)}
+                      style={style}
+                      scheme={scheme}
+                    />
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold">{dict.game.pieces[key].name}</div>
+                      <p className="mt-0.5 text-[0.7rem] leading-snug text-[var(--fg-muted)]">
+                        {dict.game.pieces[key].move}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mt-3 border-t border-[var(--hairline)] pt-3 text-[0.7rem] leading-relaxed text-[var(--fg-muted)]">
+              {dict.game.blockedNote}
+            </p>
+          </Panel>
+
           <Panel title={dict.game.captured}>
             <div className="space-y-2">
-              <CapturedRow pieces={capturedByMe} />
-              <CapturedRow pieces={capturedByAi} />
+              <CapturedRow pieces={capturedByMe} style={style} scheme={scheme} />
+              <CapturedRow pieces={capturedByAi} style={style} scheme={scheme} />
             </div>
           </Panel>
+
           <MoveLog entries={state.log} title={dict.game.moveLog} />
         </>
       }
@@ -309,22 +414,20 @@ export function JanggiGame({ dict, hubHref }: { dict: Dictionary; hubHref: strin
   );
 }
 
-function CapturedRow({ pieces }: { pieces: number[] }) {
-  if (pieces.length === 0) return <div className="min-h-6 text-xs opacity-50">—</div>;
+function CapturedRow({
+  pieces,
+  style,
+  scheme,
+}: {
+  pieces: number[];
+  style: PieceStyle;
+  scheme: ColorScheme;
+}) {
+  if (pieces.length === 0) return <div className="min-h-7 text-xs opacity-50">—</div>;
   return (
-    <div className="flex min-h-6 flex-wrap gap-1">
+    <div className="flex min-h-7 flex-wrap gap-1">
       {pieces.map((p, i) => (
-        <span
-          key={i}
-          className={`inline-flex h-6 w-6 items-center justify-center rounded-[22%] border text-[0.7rem] font-bold ${
-            j.jOwner(p) === 1
-              ? 'border-[#1f6f4f]/60 text-[#1f6f4f]'
-              : 'border-[#b83c2c]/60 text-[#b83c2c]'
-          }`}
-          style={{ background: 'radial-gradient(circle at 34% 26%, #fdf4dd, #e6d0a2)' }}
-        >
-          {LABEL[j.jType(p)][j.jOwner(p) - 1]}
-        </span>
+        <JanggiChip key={i} piece={p} style={style} scheme={scheme} className="!h-6 !w-6" />
       ))}
     </div>
   );

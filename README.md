@@ -83,6 +83,36 @@ Hints run with `silent: true` so the status line still reads "your move" rather 
 the opponent is thinking, and a suggestion is discarded if the player moves on before it lands.
 The easy boards (Gomoku, Reversi) deliberately have no hint — they do not need one.
 
+### Janggi for players who have never seen it
+
+Janggi is the hardest of the six to pick up cold, because the pieces are hanja and two of them
+(horse and elephant) can be shut down by a single blocker in a way chess has no equivalent for.
+So the board is presentable three ways, chosen from the control panel and remembered per
+browser:
+
+| Mode | What you see | Who it is for |
+|---|---|---|
+| 漢字 | 楚漢 士象馬車包卒兵 | Players who already read the traditional set |
+| Icons | crown, shield, tower, cannon, horse, elephant, pawn | Newcomers — each symbol is the most obvious picture of what the piece does |
+| K G R | K G R C N E P | Board-game players who prefer chess-style initials (N for kNight, so nothing collides) |
+
+Colours switch between **Cho / Han** (green vs red, as on a real set) and **White / Black**,
+where Cho takes white because Cho moves first — the convention a chess player expects.
+
+Two things are deliberately kept from the physical game. The **discs stay different sizes**
+(general largest, then chariot/cannon, then horse/elephant, then guard/soldier) because that
+hierarchy is a genuine playing aid, not decoration. And legal destinations are always dotted,
+with capture targets ringed.
+
+On top of that, selecting a horse or elephant marks the piece **blocking its leg** (멱) with a
+red ✕ badge in the corner of that point — the badge sits in the corner rather than over the
+piece, so you can still see what is doing the blocking. `blockedLegs()` in the engine only
+reports legs that would otherwise have led somewhere, so the board never marks a direction that
+ran off the edge anyway. A piece guide in the sidebar lists all seven pieces with a one-line
+description of how each moves.
+
+The icon mode is the default for English; the other locales default to hanja.
+
 ### Boards (`components/game/`)
 
 `useMatch.ts` holds position history, drives the AI whenever it is its turn, and keeps undo

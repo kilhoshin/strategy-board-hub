@@ -102,6 +102,44 @@ export const en: Dictionary = {
       left: 'Left elephant',
       right: 'Right elephant',
     },
+    pieceStyle: 'Piece symbols',
+    pieceStyles: { hanja: '漢字', icon: 'Icons', letter: 'K G R' },
+    defaultPieceStyle: 'icon',
+    colorScheme: 'Colours',
+    colorSchemes: { traditional: 'Cho / Han', mono: 'White / Black' },
+    legend: 'Piece guide',
+    pieces: {
+      general: {
+        name: 'General (King)',
+        move: 'One step along the lines. Never leaves the 3×3 palace.',
+      },
+      guard: {
+        name: 'Guard',
+        move: 'One step along the lines, palace only. It exists to shield the general.',
+      },
+      chariot: {
+        name: 'Chariot (Rook)',
+        move: 'Any distance in a straight line — plus along the palace diagonals.',
+      },
+      cannon: {
+        name: 'Cannon',
+        move: 'Must jump exactly one piece. Never over, and never onto, another cannon.',
+      },
+      horse: {
+        name: 'Horse (Knight)',
+        move: 'One step straight, then one diagonally outward. Blocked if the straight step is occupied.',
+      },
+      elephant: {
+        name: 'Elephant',
+        move: 'One step straight, then two diagonally outward. Blocked at either of the first two points.',
+      },
+      soldier: {
+        name: 'Soldier (Pawn)',
+        move: 'One step forward or sideways, never backward. Uses the palace diagonals when attacking.',
+      },
+    },
+    blockedNote:
+      '✕ marks a piece standing in the way. Horses and elephants must walk their first step or two through empty points, so a single blocker shuts down a whole direction.',
     playFirst: 'first',
     playSecond: 'second',
     black: 'Black',

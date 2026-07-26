@@ -262,6 +262,41 @@ export function movesFrom(b: ArrayLike<number>, from: number): number[] {
   return collect(b, from, []);
 }
 
+/**
+ * Points that are currently stopping this horse or elephant — the "leg" that
+ * has been blocked (멱/덜미). Only legs that would otherwise lead somewhere are
+ * reported, so the board never marks a direction that was off the edge anyway.
+ */
+export function blockedLegs(b: ArrayLike<number>, from: number): number[] {
+  const p = b[from];
+  if (!p) return [];
+  const ty = jType(p);
+  const me = jOwner(p);
+  const r = row(from);
+  const c = col(from);
+  const out = new Set<number>();
+
+  const reachable = (to: number) => to >= 0 && (!b[to] || jOwner(b[to]) !== me);
+
+  if (ty === HORSE) {
+    for (const leg of HORSE_LEGS) {
+      const blk = at(r + leg.block[0], c + leg.block[1]);
+      if (blk < 0 || !b[blk]) continue;
+      if (leg.steps.some(([dr, dc]) => reachable(at(r + dr, c + dc)))) out.add(blk);
+    }
+  } else if (ty === ELEPHANT) {
+    for (const leg of ELEPHANT_LEGS) {
+      if (!reachable(at(r + leg.to[0], c + leg.to[1]))) continue;
+      const blk = at(r + leg.block[0], c + leg.block[1]);
+      const mid = at(r + leg.mid[0], c + leg.mid[1]);
+      if (blk >= 0 && b[blk]) out.add(blk);
+      else if (mid >= 0 && b[mid]) out.add(mid);
+    }
+  }
+
+  return [...out];
+}
+
 /** Reused across the search so move generation never allocates. */
 const scratch: number[] = [];
 

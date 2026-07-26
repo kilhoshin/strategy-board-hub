@@ -75,6 +75,48 @@ export function LevelPicker({
   );
 }
 
+/** Pill-style radio group used for the presentation options. */
+export function SegmentedControl<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (value: T) => void;
+}) {
+  return (
+    <div>
+      <div className="eyebrow mb-2">{label}</div>
+      <div
+        role="radiogroup"
+        aria-label={label}
+        className="grid gap-1 rounded-full border border-[var(--hairline)] bg-[var(--surface)] p-1"
+        style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
+      >
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            role="radio"
+            aria-checked={value === option.value}
+            onClick={() => onChange(option.value)}
+            className={`truncate rounded-full px-2 py-1.5 text-xs font-semibold transition-all duration-300 ${
+              value === option.value
+                ? 'bg-[var(--surface-strong)] text-[var(--fg)] shadow-inner'
+                : 'text-[var(--fg-muted)] hover:text-[var(--fg)]'
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function SidePicker({
   dict,
   mySide,

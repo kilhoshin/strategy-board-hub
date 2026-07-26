@@ -195,6 +195,21 @@ for (const { slug, moves, probe, want, hints } of GAMES) {
       await page.screenshot({ path: join(SHOT_DIR, `hint-${slug}.png`) });
     }
 
+    // Changing the position while a suggestion is on screen must not blow up:
+    // the hint still points at a square the piece has just left.
+    consoleErrors.length = 0;
+    await page.getByRole('button', { name: /undo|무르기|待った|悔棋/i }).click();
+    await page.waitForTimeout(700);
+    check(
+      `${slug}: position change with a hint shown is safe`,
+      consoleErrors.length === 0,
+      consoleErrors.slice(0, 2).join(' | '),
+    );
+    check(
+      `${slug}: hint cleared once the position changes`,
+      (await page.locator('main svg[role="img"]').count()) === 0,
+    );
+
     // Switching hints off must remove both the control and the overlay.
     await panel.locator('button[role="switch"]').click();
     const gone =
@@ -210,6 +225,84 @@ for (const { slug, moves, probe, want, hints } of GAMES) {
     await page.screenshot({ path: join(SHOT_DIR, `${slug}.png`) });
   }
 }
+
+/* -------------------- janggi presentation for newcomers -------------------- */
+
+await page.goto(`${BASE}/janggi/`, { waitUntil: 'networkidle' });
+// A previous run may have persisted a preference; the default is what we test.
+await page.evaluate(() => {
+  localStorage.removeItem('sbh-janggi-style');
+  localStorage.removeItem('sbh-janggi-colors');
+});
+await page.reload({ waitUntil: 'networkidle' });
+await page.waitForSelector('main button[aria-label="14"]');
+
+const iconCount = await page.locator('main button[aria-label="11"] span span svg').count();
+check('janggi: english defaults to icons', iconCount === 1, String(iconCount));
+
+await page.getByRole('radio', { name: 'K G R' }).click();
+const letter = await page.locator('main button[aria-label="11"]').innerText();
+check('janggi: letter mode shows chess initials', letter.trim() === 'R', letter.trim());
+
+await page.getByRole('radio', { name: '漢字' }).click();
+const hanja = await page.locator('main button[aria-label="11"]').innerText();
+check('janggi: hanja mode restored', hanja.trim() === '車', hanja.trim());
+
+// Selecting a horse must flag the piece blocking its leg (멱).
+await page.locator('main button[aria-label="21"]').click();
+const badges = await page.locator('main button[aria-label="31"] svg circle[fill="#cf5540"]').count();
+check('janggi: blocked leg is marked', badges === 1);
+// ...and the piece underneath must remain visible.
+const stillThere = await page.locator('main button[aria-label="31"] > span.placed').count();
+check('janggi: blocker piece still visible', stillThere === 1);
+
+const legendRows = await page
+  .locator('aside section', { hasText: 'Piece guide' })
+  .locator('li')
+  .count();
+check('janggi: legend lists all seven pieces', legendRows === 7, String(legendRows));
+
+// Regression: asking for a suggestion and then actually playing it used to
+// crash, because the board rendered the new position for one frame while the
+// hint still pointed at the square the piece had left.
+await page.getByRole('radio', { name: 'Icons' }).click();
+await page.locator('body').click({ position: { x: 5, y: 5 } });
+consoleErrors.length = 0;
+await page.locator('aside button.btn-primary').click();
+await page.waitForSelector('main svg[role="img"]', { timeout: 25000 });
+const suggested = await page.locator('aside p.display').first().innerText();
+const coords = suggested.match(/(\d+)\s*→\s*(\d+)/);
+check('janggi: suggestion is readable', !!coords, suggested);
+if (coords) {
+  await page.locator(`main button[aria-label="${coords[1]}"]`).click();
+  await page.locator(`main button[aria-label="${coords[2]}"]`).click();
+  await page.waitForTimeout(900);
+  check(
+    'janggi: playing the suggested move does not crash',
+    consoleErrors.length === 0,
+    consoleErrors.slice(0, 2).join(' | '),
+  );
+}
+
+await page.getByRole('radio', { name: 'White / Black' }).click();
+const persisted = await page.evaluate(() => [
+  localStorage.getItem('sbh-janggi-style'),
+  localStorage.getItem('sbh-janggi-colors'),
+]);
+check(
+  'janggi: presentation choices persist',
+  persisted[0] === 'icon' && persisted[1] === 'mono',
+  persisted.join('/'),
+);
+if (SHOTS) {
+  await page.waitForTimeout(900);
+  await page.screenshot({ path: join(SHOT_DIR, 'janggi-western.png') });
+}
+// Leave storage clean so the next run tests the real default again.
+await page.evaluate(() => {
+  localStorage.removeItem('sbh-janggi-style');
+  localStorage.removeItem('sbh-janggi-colors');
+});
 
 /* ------------------------------ mobile layout ----------------------------- */
 

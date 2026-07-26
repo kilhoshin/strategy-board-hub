@@ -95,6 +95,23 @@ export interface Dictionary {
     komi: string;
     setup: string;
     setups: { inner: string; outer: string; left: string; right: string };
+
+    /* --- Janggi presentation, aimed at players new to the game ----------- */
+    /** Notation picker: traditional hanja, western icons, or chess letters. */
+    pieceStyle: string;
+    pieceStyles: { hanja: string; icon: string; letter: string };
+    /** Which notation this locale starts on. */
+    defaultPieceStyle: 'hanja' | 'icon';
+    colorScheme: string;
+    colorSchemes: { traditional: string; mono: string };
+    /** Sidebar key explaining what each piece is and how it moves. */
+    legend: string;
+    pieces: Record<
+      'general' | 'guard' | 'chariot' | 'cannon' | 'horse' | 'elephant' | 'soldier',
+      { name: string; move: string }
+    >;
+    /** Explains the ✕ markers drawn on a blocked horse/elephant leg. */
+    blockedNote: string;
     playFirst: string;
     playSecond: string;
     black: string;
