@@ -1,0 +1,9 @@
+{
+  // Assets-only deployment: no server-side Worker script, this just tells
+  // Cloudflare to serve the static export produced by `npm run build`.
+  "name": "strategy-board-hub",
+  "compatibility_date": "2024-09-23",
+  "assets": {
+    "directory": "./out"
+  }
+}
