@@ -199,8 +199,11 @@ export function HintPanel({
               : 'border-[var(--hairline-strong)] bg-[var(--surface)]'
           }`}
         >
+          {/* left-0 anchors the knob to the track. Without it the browser uses
+              the button's static position — roughly centred — and the travel
+              distance then pushes the knob outside the track entirely. */}
           <span
-            className={`absolute top-0.5 h-5 w-5 rounded-full shadow-md transition-transform duration-300 ${
+            className={`absolute left-0 top-0.5 h-5 w-5 rounded-full shadow-md transition-transform duration-300 ${
               hintsEnabled
                 ? 'translate-x-[1.375rem] bg-[#2a1e08]'
                 : 'translate-x-0.5 bg-[var(--fg-muted)]'

@@ -210,8 +210,19 @@ for (const { slug, moves, probe, want, hints } of GAMES) {
       (await page.locator('main svg[role="img"]').count()) === 0,
     );
 
+    // The toggle knob must sit inside its track in both positions.
+    const knobFits = async () =>
+      panel.locator('button[role="switch"]').evaluate((track) => {
+        const knob = track.firstElementChild;
+        const t = track.getBoundingClientRect();
+        const k = knob.getBoundingClientRect();
+        return k.left >= t.left - 0.5 && k.right <= t.right + 0.5;
+      });
+    check(`${slug}: hint toggle knob inside track (on)`, await knobFits());
+
     // Switching hints off must remove both the control and the overlay.
     await panel.locator('button[role="switch"]').click();
+    check(`${slug}: hint toggle knob inside track (off)`, await knobFits());
     const gone =
       (await panel.locator('button.btn-primary').count()) === 0 &&
       (await page.locator('main svg[role="img"]').count()) === 0;

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/gen-ads-txt.mjs && next build",
     "start": "npx serve out",
     "lint": "next lint",
     "gen:routes": "node scripts/gen-routes.mjs",

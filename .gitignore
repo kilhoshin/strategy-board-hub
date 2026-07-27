@@ -10,5 +10,8 @@ out/
 next-env.d.ts
 *.tsbuildinfo
 
+# Generated at build time from NEXT_PUBLIC_ADSENSE_CLIENT
+public/ads.txt
+
 .DS_Store
 Thumbs.db

@@ -170,7 +170,33 @@ Ad slots deliberately never sit over or beside a board — misclick-prone placem
 interactive content is a policy risk. In development, unconfigured slots render as a faint
 dashed outline so the placements stay visible; in production they render nothing.
 
-## Deploying
+`public/ads.txt` is generated at build time from `NEXT_PUBLIC_ADSENSE_CLIENT` (see
+`scripts/gen-ads-txt.mjs`) and is git-ignored. With no publisher id set, no file ships.
+
+## Deploying, then AdSense — in that order
+
+AdSense reviews a **live** site, so the site has to be up before you can apply. That makes it
+two deploys:
+
+1. **Deploy with ads off.** Point a domain you own at the site and set `NEXT_PUBLIC_SITE_URL`
+   to it. Leave every AdSense variable blank — no ad script loads and no slots render. Submit
+   `sitemap.xml` in Google Search Console.
+2. **Let it gather some traffic.** A brand-new domain with no visitors is the most common
+   rejection. The plan's advice holds: get the Gomoku page earning real search traffic first.
+3. **Add the site in AdSense.** Google issues your `ca-pub-…` publisher id and asks you to put
+   its snippet on the site to verify ownership.
+4. **Set `NEXT_PUBLIC_ADSENSE_CLIENT` and redeploy.** That single variable turns on the
+   AdSense script (which is the verification snippet) and generates `ads.txt`. Leave the four
+   slot ids blank — during review there is nothing to show yet, and that is fine.
+5. **Wait for the review.** Days to a few weeks.
+6. **Once approved, create ad units,** then set the four `NEXT_PUBLIC_AD_SLOT_*` ids and
+   redeploy. Ads appear.
+
+Two things worth knowing before step 1: use a custom domain, because free platform subdomains
+(`*.vercel.app`, `*.pages.dev`) are generally not accepted as AdSense sites; and the `/about`
+and `/privacy` pages are review requirements, which is why they exist in all four locales.
+
+## Hosting
 
 `output: 'export'` writes a fully static `./out`. Any static host works:
 
