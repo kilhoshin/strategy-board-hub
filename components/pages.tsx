@@ -13,6 +13,7 @@ import {
   websiteJsonLd,
 } from '@/lib/seo';
 import { AdSenseScript } from '@/components/site/AdSlot';
+import { GoogleAnalyticsScript } from '@/components/site/Analytics';
 import { Footer } from '@/components/site/Footer';
 import { Header } from '@/components/site/Header';
 import { GameView } from '@/components/views/GameView';
@@ -53,6 +54,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
           }}
         />
         <AdSenseScript />
+        <GoogleAnalyticsScript />
       </head>
       <body>
         <a
