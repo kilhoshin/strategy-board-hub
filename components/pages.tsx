@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { GAME_IDS, type GameId } from '@/lib/games/types';
-import { GAME_SLUG, LANG_TAG, type Locale, localePath } from '@/lib/i18n/config';
+import { GAME_SLUG, LANG_TAG, PUZZLE_GAMES, type Locale, localePath } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n';
 import { displayFont, sansFont } from '@/lib/fonts';
 import {
@@ -18,6 +18,7 @@ import { Footer } from '@/components/site/Footer';
 import { Header } from '@/components/site/Header';
 import { GameView } from '@/components/views/GameView';
 import { HomeView } from '@/components/views/HomeView';
+import { PuzzleView } from '@/components/views/PuzzleView';
 import { StaticView } from '@/components/views/StaticView';
 
 /* --------------------------------- shell --------------------------------- */
@@ -133,6 +134,33 @@ export function GamePage({ locale, slug }: { locale: Locale; slug: string }) {
       <GameView locale={locale} dict={dict} game={game} />
     </>
   );
+}
+
+/* --------------------------------- puzzle --------------------------------- */
+
+function resolvePuzzleGame(slug: string): GameId | null {
+  const game = resolveGame(slug);
+  return game && PUZZLE_GAMES.includes(game) ? game : null;
+}
+
+export function puzzleMetadata(locale: Locale, slug: string): Metadata {
+  const game = resolvePuzzleGame(slug);
+  const dict = getDictionary(locale);
+  if (!game) return pageMetadata({ locale, title: dict.meta.homeTitle, description: dict.meta.homeDescription });
+  const c = dict.games[game];
+  return pageMetadata({
+    locale,
+    sub: `${GAME_SLUG[game]}/puzzles`,
+    title: `${c.name} ${dict.puzzle.title}`,
+    description: dict.puzzle.tagline,
+  });
+}
+
+export function PuzzlePage({ locale, slug }: { locale: Locale; slug: string }) {
+  const game = resolvePuzzleGame(slug);
+  const dict = getDictionary(locale);
+  if (!game) return <HomeView locale={locale} dict={dict} />;
+  return <PuzzleView locale={locale} dict={dict} game={game} />;
 }
 
 /* --------------------------------- static --------------------------------- */

@@ -195,6 +195,21 @@ export const en: Dictionary = {
     onThisPage: 'On this page',
     faqSchemaNote: 'Frequently asked questions',
   },
+  puzzle: {
+    title: 'Puzzles',
+    tagline: 'Find the forced win.',
+    tierLabel: ['Mate in 1', 'Mate in 2', 'Mate in 3'],
+    prompt: 'Find the winning move.',
+    correct: 'Correct!',
+    incorrect: 'Not quite — try again.',
+    retry: 'Retry',
+    next: 'Next puzzle',
+    solved: 'Solved!',
+    hint: 'Hint',
+    showHint: 'Show hint',
+    progress: 'Puzzle',
+    backToGame: 'Back to the game',
+  },
   footer: {
     blurb:
       'A quiet corner of the web for abstract strategy games. Everything runs client-side, so your games stay on your machine.',

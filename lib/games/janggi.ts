@@ -577,3 +577,64 @@ export function bestMove(state: JanggiState, level: Level = 3): JanggiMove | nul
 
   return chosen;
 }
+
+/** Forced-mate distance in our own moves, when the score is a genuine mate score. */
+function mateInFor(score: number): number | undefined {
+  return score > MATE - 1000 ? Math.ceil((MATE - score) / 2) : undefined;
+}
+
+/**
+ * Like `bestMove`, but returns every root move with its search score instead
+ * of only the chosen one. Offline-only (puzzle generation) — not used by the
+ * live hint/AI path, so it always runs the real search.
+ */
+export function analyzeRoot(
+  state: JanggiState,
+  level: Level = 3,
+): { move: JanggiMove; score: number; mateIn?: number }[] {
+  const all = legalMoves(state);
+  const moves = all.filter((m) => m.from >= 0);
+  if (moves.length === 0) return [];
+
+  const me = state.turn;
+  const b = Int8Array.from(state.board);
+
+  const deadline = Date.now() + TIME_BUDGET[level];
+  let order = [...moves].sort(
+    (a, z) =>
+      (state.board[z.to] ? VALUE[jType(state.board[z.to])] : 0) -
+      (state.board[a.to] ? VALUE[jType(state.board[a.to])] : 0),
+  );
+  let final = order.map((m) => ({ m, v: -Infinity }));
+
+  for (let depth = 1; depth <= MAX_DEPTH[level]; depth++) {
+    let alpha = -Infinity;
+    const scored: { m: JanggiMove; v: number }[] = [];
+    try {
+      for (const m of order) {
+        const piece = b[m.from];
+        const taken = b[m.to];
+        b[m.to] = piece;
+        b[m.from] = 0;
+        const draw = isBikjang(b);
+        const v = draw
+          ? 0
+          : -negamax(b, other(me), depth - 1, 1, -Infinity, -alpha, deadline);
+        b[m.from] = piece;
+        b[m.to] = taken;
+        scored.push({ m, v });
+        if (v > alpha) alpha = v;
+      }
+    } catch (e) {
+      if (e !== TIMEOUT) throw e;
+      break;
+    }
+    scored.sort((a, z) => z.v - a.v);
+    order = scored.map((s) => s.m);
+    final = scored;
+    if (alpha > MATE - 100) break;
+    if (Date.now() > deadline) break;
+  }
+
+  return final.map(({ m, v }) => ({ move: m, score: v, mateIn: mateInFor(v) }));
+}

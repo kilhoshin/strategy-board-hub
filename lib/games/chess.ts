@@ -759,3 +759,56 @@ export function bestMove(state: ChessState, level: Level = 3): ChessMove | null 
 
   return unpack(chosen);
 }
+
+/** Forced-mate distance in our own moves, when the score is a genuine mate score. */
+function mateInFor(score: number): number | undefined {
+  return score > MATE - 1000 ? Math.ceil((MATE - score) / 2) : undefined;
+}
+
+/**
+ * Like `bestMove`, but returns every root move with its search score instead
+ * of only the chosen one. Offline-only (puzzle generation) — not used by the
+ * live hint/AI path, so it always runs the real search, ignoring level 1's
+ * heuristic shortcut.
+ */
+export function analyzeRoot(
+  state: ChessState,
+  level: Level = 3,
+): { move: ChessMove; score: number; mateIn?: number }[] {
+  const bd = new Board(state);
+  const roots = bd.legal();
+  if (roots.length === 0) return [];
+
+  for (const k of killers) k[0] = k[1] = 0;
+
+  const deadline = Date.now() + TIME_BUDGET[level];
+  let order = roots
+    .map((mv) => ({ mv, s: mvvLva(bd, mv) }))
+    .sort((a, b) => b.s - a.s)
+    .map((x) => x.mv);
+  let final = order.map((mv) => ({ mv, v: -Infinity }));
+
+  for (let depth = 1; depth <= MAX_DEPTH[level]; depth++) {
+    let alpha = -Infinity;
+    const scored: { mv: number; v: number }[] = [];
+    try {
+      for (const mv of order) {
+        bd.make(mv);
+        const v = -negamax(bd, depth - 1, 1, -Infinity, -alpha, deadline);
+        bd.unmake(mv);
+        scored.push({ mv, v });
+        if (v > alpha) alpha = v;
+      }
+    } catch (e) {
+      if (e !== TIMEOUT) throw e;
+      break;
+    }
+    scored.sort((a, b) => b.v - a.v);
+    order = scored.map((s) => s.mv);
+    final = scored;
+    if (alpha > MATE - 100) break;
+    if (Date.now() > deadline) break;
+  }
+
+  return final.map(({ mv, v }) => ({ move: unpack(mv), score: v, mateIn: mateInFor(v) }));
+}

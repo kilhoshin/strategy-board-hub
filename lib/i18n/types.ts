@@ -158,6 +158,23 @@ export interface Dictionary {
     onThisPage: string;
     faqSchemaNote: string;
   };
+  puzzle: {
+    /** Page title, e.g. "Chess Puzzles". */
+    title: string;
+    tagline: string;
+    tierLabel: [string, string, string];
+    prompt: string;
+    correct: string;
+    incorrect: string;
+    retry: string;
+    next: string;
+    solved: string;
+    hint: string;
+    showHint: string;
+    /** Label prefixed to a "3 / 30" counter composed in the component. */
+    progress: string;
+    backToGame: string;
+  };
   footer: {
     blurb: string;
     rights: string;

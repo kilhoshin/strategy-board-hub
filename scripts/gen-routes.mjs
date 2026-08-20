@@ -17,6 +17,9 @@ const LOCALES = [
 
 const GAME_SLUGS = ['gomoku', 'reversi', 'janggi', 'chess', 'shogi', 'go'];
 
+/** Games with a puzzle set — see scripts/import-chess-puzzles.ts / scripts/gen-puzzles.ts. */
+const PUZZLE_SLUGS = ['chess', 'janggi', 'shogi'];
+
 const root = process.cwd();
 
 function write(relPath, contents) {
@@ -74,6 +77,22 @@ export const metadata = gameMetadata('${code}', '${slug}');
 
 export default function Page() {
   return <GamePage locale="${code}" slug="${slug}" />;
+}
+`,
+    );
+  }
+
+  for (const slug of PUZZLE_SLUGS) {
+    write(
+      `${base}/${slug}/puzzles/page.tsx`,
+      `
+${banner}
+import { PuzzlePage, puzzleMetadata } from '@/components/pages';
+
+export const metadata = puzzleMetadata('${code}', '${slug}');
+
+export default function Page() {
+  return <PuzzlePage locale="${code}" slug="${slug}" />;
 }
 `,
     );

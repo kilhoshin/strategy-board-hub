@@ -62,6 +62,13 @@ export function gamePath(locale: Locale, game: GameId): string {
   return localePath(locale, GAME_SLUG[game]);
 }
 
+/** Games with a puzzle set — see scripts/import-chess-puzzles.ts / scripts/gen-puzzles.ts. */
+export const PUZZLE_GAMES: GameId[] = ['chess', 'janggi', 'shogi'];
+
+export function puzzlePath(locale: Locale, game: GameId): string {
+  return localePath(locale, `${GAME_SLUG[game]}/puzzles`);
+}
+
 export function absoluteUrl(path: string): string {
   const clean = path === '/' ? '/' : `${path.replace(/\/$/, '')}/`;
   return `${SITE_URL}${clean}`;

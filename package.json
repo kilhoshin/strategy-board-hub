@@ -9,9 +9,10 @@
     "lint": "next lint",
     "gen:routes": "node scripts/gen-routes.mjs",
     "test:engines": "tsx scripts/engine-smoke.ts",
+    "test:puzzles": "tsx scripts/verify-puzzles.ts",
     "test:ui": "node scripts/ui-smoke.mjs",
     "test:ui:shots": "node scripts/ui-smoke.mjs --shots",
-    "test": "npm run test:engines && npm run build && npm run test:ui"
+    "test": "npm run test:engines && npm run test:puzzles && npm run build && npm run test:ui"
   },
   "dependencies": {
     "next": "^16.2.12",

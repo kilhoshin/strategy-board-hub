@@ -173,6 +173,21 @@ export const zh: Dictionary = {
     onThisPage: '本頁目錄',
     faqSchemaNote: '常見問題',
   },
+  puzzle: {
+    title: '棋題',
+    tagline: '找出制勝的一手。',
+    tierLabel: ['一手將死', '二手將死', '三手將死'],
+    prompt: '找出致勝的一手。',
+    correct: '正確！',
+    incorrect: '不太對 — 再試一次。',
+    retry: '重試',
+    next: '下一題',
+    solved: '解出來了！',
+    hint: '提示',
+    showHint: '顯示提示',
+    progress: '棋題',
+    backToGame: '返回對局',
+  },
   footer: {
     blurb:
       '一個安靜下棋的網路角落。所有運算都在用戶端完成，棋譜留在你自己的裝置上。',

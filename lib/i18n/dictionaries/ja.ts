@@ -174,6 +174,21 @@ export const ja: Dictionary = {
     onThisPage: 'このページの目次',
     faqSchemaNote: 'よくある質問',
   },
+  puzzle: {
+    title: 'パズル',
+    tagline: '必勝の一手を見つけよう。',
+    tierLabel: ['1手詰め', '2手詰め', '3手詰め'],
+    prompt: '勝利につながる一手を見つけてください。',
+    correct: '正解です！',
+    incorrect: '違います — もう一度お試しください。',
+    retry: 'もう一度',
+    next: '次のパズル',
+    solved: '解決しました！',
+    hint: 'ヒント',
+    showHint: 'ヒントを見る',
+    progress: 'パズル',
+    backToGame: 'ゲームに戻る',
+  },
   footer: {
     blurb:
       'アブストラクト戦略ゲームを静かに楽しむための、ウェブの片隅。すべてクライアント側で動くので、棋譜はお使いの端末に残ります。',

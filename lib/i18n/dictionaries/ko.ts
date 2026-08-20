@@ -175,6 +175,21 @@ export const ko: Dictionary = {
     onThisPage: '이 페이지의 목차',
     faqSchemaNote: '자주 묻는 질문',
   },
+  puzzle: {
+    title: '퍼즐',
+    tagline: '외통수를 찾아보세요.',
+    tierLabel: ['외통 1수', '외통 2수', '외통 3수'],
+    prompt: '이기는 수를 찾아보세요.',
+    correct: '정답입니다!',
+    incorrect: '아쉬워요 — 다시 시도해 보세요.',
+    retry: '다시 시도',
+    next: '다음 퍼즐',
+    solved: '해결!',
+    hint: '힌트',
+    showHint: '힌트 보기',
+    progress: '퍼즐',
+    backToGame: '게임으로 돌아가기',
+  },
   footer: {
     blurb:
       '추상전략게임을 조용히 둘 수 있는 웹의 한 구석. 모든 연산이 클라이언트에서 이루어지므로 기보는 당신의 기기에 남습니다.',

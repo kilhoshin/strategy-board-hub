@@ -694,3 +694,52 @@ export function bestMove(state: ShogiState, level: Level = 3): ShogiMove | null 
 
   return chosen;
 }
+
+/** Forced-mate distance in our own moves, when the score is a genuine mate score. */
+function mateInFor(score: number): number | undefined {
+  return score > MATE - 1000 ? Math.ceil((MATE - score) / 2) : undefined;
+}
+
+/**
+ * Like `bestMove`, but returns every root move with its search score instead
+ * of only the chosen one. Offline-only (puzzle generation) — not used by the
+ * live hint/AI path, so it always runs the real search.
+ */
+export function analyzeRoot(
+  state: ShogiState,
+  level: Level = 3,
+): { move: ShogiMove; score: number; mateIn?: number }[] {
+  const pos = new Position(state);
+  const roots = pos.legal();
+  if (roots.length === 0) return [];
+
+  const me = state.turn;
+
+  const deadline = Date.now() + TIME_BUDGET[level];
+  let order = [...roots].sort((a, b) => moveScore(pos, b) - moveScore(pos, a));
+  let final = order.map((m) => ({ m, v: -Infinity }));
+
+  for (let depth = 1; depth <= MAX_DEPTH[level]; depth++) {
+    let alpha = -Infinity;
+    const scored: { m: ShogiMove; v: number }[] = [];
+    try {
+      for (const m of order) {
+        pos.make(m);
+        const v = -negamax(pos, other(me), depth - 1, 1, -Infinity, -alpha, deadline);
+        pos.unmake(m);
+        scored.push({ m, v });
+        if (v > alpha) alpha = v;
+      }
+    } catch (e) {
+      if (e !== TIMEOUT) throw e;
+      break;
+    }
+    scored.sort((a, b) => b.v - a.v);
+    order = scored.map((s) => s.m);
+    final = scored;
+    if (alpha > MATE - 200) break;
+    if (Date.now() > deadline) break;
+  }
+
+  return final.map(({ m, v }) => ({ move: m, score: v, mateIn: mateInFor(v) }));
+}
