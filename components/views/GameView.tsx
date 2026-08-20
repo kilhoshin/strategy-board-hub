@@ -1,6 +1,6 @@
 ﻿import { Link } from '@/components/site/Link';
 import { GAME_IDS, type GameId } from '@/lib/games/types';
-import { type Locale, gamePath } from '@/lib/i18n/config';
+import { PUZZLE_GAMES, type Locale, gamePath, puzzlePath } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/types';
 import { AdSlot } from '@/components/site/AdSlot';
 import { BoardPreview } from '@/components/site/BoardPreview';
@@ -50,6 +50,12 @@ export function GameView({
                 <p className="mt-3 max-w-xl text-sm leading-relaxed text-[var(--fg-muted)] sm:text-base">
                   {c.tagline}
                 </p>
+                {PUZZLE_GAMES.includes(game) && (
+                  <Link href={puzzlePath(locale, game)} className="btn btn-primary mt-4 inline-flex w-fit">
+                    <span aria-hidden="true">✦</span>
+                    {dict.puzzle.title}
+                  </Link>
+                )}
               </div>
               <div className="hidden h-20 w-20 shrink-0 overflow-hidden rounded-xl ring-1 ring-[var(--hairline-strong)] sm:block">
                 <BoardPreview game={game} id={`hero-${game}`} />
