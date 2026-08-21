@@ -4,6 +4,7 @@ import * as chess from '../games/chess';
 import * as janggi from '../games/janggi';
 import * as shogi from '../games/shogi';
 import * as go from '../games/go';
+import * as baghchal from '../games/baghchal';
 import type { GameId, Level } from '../games/types';
 
 export interface AiRequest {
@@ -34,6 +35,8 @@ export function solve({ game, state, level }: Omit<AiRequest, 'id'>): unknown {
       return shogi.bestMove(state as shogi.ShogiState, level);
     case 'go':
       return go.bestMove(state as go.GoState, level);
+    case 'baghchal':
+      return baghchal.bestMove(state as baghchal.BaghchalState, level);
     default:
       return null;
   }

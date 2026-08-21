@@ -5,6 +5,7 @@ import * as chess from '../lib/games/chess';
 import * as janggi from '../lib/games/janggi';
 import * as shogi from '../lib/games/shogi';
 import * as go from '../lib/games/go';
+import * as baghchal from '../lib/games/baghchal';
 import type { Level } from '../lib/games/types';
 
 let failures = 0;
@@ -146,6 +147,25 @@ const LEVEL: Level = 3;
   }
   const score = go.finalScore(s, 120);
   check('go 9x9 self-play', plies > 10, `${plies} plies, worst ${worst}ms, B${score.black}/W${score.white}`);
+}
+
+{
+  let s = baghchal.initial();
+  let worst = 0;
+  let plies = 0;
+  while (!baghchal.outcome(s).over && plies < 400) {
+    const [m, ms] = timed(() => baghchal.bestMove(s, LEVEL));
+    worst = Math.max(worst, ms);
+    if (!m) break;
+    s = baghchal.apply(s, m);
+    plies++;
+  }
+  const o = baghchal.outcome(s);
+  check(
+    'baghchal full game',
+    o.over,
+    `${plies} plies, winner ${o.winner} (${o.reason}), goats captured ${s.goatsCaptured}, worst ${worst}ms`,
+  );
 }
 
 console.log(failures === 0 ? '\nAll checks passed.' : `\n${failures} check(s) failed.`);

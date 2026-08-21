@@ -120,6 +120,8 @@ export interface Dictionary {
     han: string;
     sente: string;
     gote: string;
+    goat: string;
+    tiger: string;
     check: string;
     /** Result banner strings. */
     youWin: string;

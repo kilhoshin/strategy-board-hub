@@ -1,3 +1,4 @@
+import { EDGES } from '@/lib/games/baghchal';
 import type { GameId } from '@/lib/games/types';
 
 const WOOD = ['#d9b071', '#c08f4c'];
@@ -220,6 +221,37 @@ export function BoardPreview({ game, id }: { game: GameId; id: string }) {
               {ch}
             </text>
           </g>
+        ))}
+      </svg>
+    );
+  }
+
+  if (game === 'baghchal') {
+    const bn = 5;
+    const px = (i: number) => 8 + (i % bn) * ((100 - 16) / (bn - 1));
+    const py = (i: number) => 8 + Math.floor(i / bn) * ((100 - 16) / (bn - 1));
+    const tigers = [0, 4, 20, 24];
+    const goats = [6, 8, 12, 16, 18];
+    return (
+      <svg {...common}>
+        <Defs id={id} />
+        <rect width="100" height="100" rx="6" fill={`url(#${id}-wood)`} />
+        {EDGES.map(([a, b], i) => (
+          <line
+            key={i}
+            x1={px(a)}
+            y1={py(a)}
+            x2={px(b)}
+            y2={py(b)}
+            stroke="rgba(60,35,12,0.5)"
+            strokeWidth="0.55"
+          />
+        ))}
+        {goats.map((p, i) => (
+          <circle key={`g${i}`} cx={px(p)} cy={py(p)} r="3.4" fill={`url(#${id}-w)`} />
+        ))}
+        {tigers.map((p, i) => (
+          <circle key={`t${i}`} cx={px(p)} cy={py(p)} r="3.4" fill="#cf5540" stroke="#5c1c14" strokeWidth="0.5" />
         ))}
       </svg>
     );

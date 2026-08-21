@@ -51,6 +51,10 @@ const Games = {
     ssr: false,
     loading: () => <Skeleton label="go" />,
   }),
+  baghchal: dynamic(() => import('./BaghchalGame').then((m) => m.BaghchalGame), {
+    ssr: false,
+    loading: () => <Skeleton label="baghchal" />,
+  }),
 } as const;
 
 export function GameStage({

@@ -2,10 +2,11 @@ import type { Dictionary } from '../types';
 
 export const en: Dictionary = {
   meta: {
-    siteTagline: 'Six abstract strategy games. One browser. No sign-up.',
-    homeTitle: 'Strategy Board Hub — Play Gomoku, Reversi, Chess, Janggi, Shogi & Go vs AI, free',
+    siteTagline: 'Seven abstract strategy games. One browser. No sign-up.',
+    homeTitle:
+      'Strategy Board Hub — Play Gomoku, Reversi, Chess, Janggi, Shogi, Go & Bagh-Chal vs AI, free',
     homeDescription:
-      'Free online abstract strategy games with a built-in AI opponent: Gomoku, Reversi, Janggi (Korean chess), chess, shogi and Go. Nothing to install, no account, four difficulty levels, plus full rules and strategy guides.',
+      'Free online abstract strategy games with a built-in AI opponent: Gomoku, Reversi, Janggi (Korean chess), chess, shogi, Go and Bagh-Chal (the Nepali tiger-and-goat hunt game). Nothing to install, no account, four difficulty levels, plus full rules and strategy guides.',
     keywords: [
       'abstract strategy games',
       'play gomoku online free',
@@ -13,6 +14,7 @@ export const en: Dictionary = {
       'korean chess online',
       'shogi against AI',
       'play go 9x9 online',
+      'bagh chal online',
       'free board games no download',
     ],
   },
@@ -25,14 +27,14 @@ export const en: Dictionary = {
     skipToGame: 'Skip to the board',
   },
   hero: {
-    eyebrow: 'Six games · Four difficulties · Zero downloads',
+    eyebrow: 'Seven games · Four difficulties · Zero downloads',
     titleLine1: 'The oldest games',
     titleLine2: 'ever devised',
     subtitle:
-      'Gomoku, Reversi, Janggi, chess, shogi and Go — each with an AI opponent that runs entirely inside your browser. No account, no install, no waiting for a match.',
+      'Gomoku, Reversi, Janggi, chess, shogi, Go and Bagh-Chal — each with an AI opponent that runs entirely inside your browser. No account, no install, no waiting for a match.',
     ctaPlay: 'Play Gomoku now',
-    ctaBrowse: 'Browse all six',
-    stat1: '6',
+    ctaBrowse: 'Browse all seven',
+    stat1: '7',
     stat1Label: 'Complete games',
     stat2: '4',
     stat2Label: 'AI difficulty levels',
@@ -41,7 +43,7 @@ export const en: Dictionary = {
   },
   home: {
     pickEyebrow: 'Choose your board',
-    pickTitle: 'Six ways to think',
+    pickTitle: 'Seven ways to think',
     pickSubtitle:
       'Every game here is one of pure information: no dice, no hidden cards, no luck. Just a board, a position, and whatever you can see in it.',
     whyEyebrow: 'Why this hub',
@@ -148,6 +150,8 @@ export const en: Dictionary = {
     han: 'Han (漢)',
     sente: 'Sente',
     gote: 'Gote',
+    goat: 'Goat',
+    tiger: 'Tiger',
     check: 'Check',
     youWin: 'You win',
     youLose: 'You lose',
@@ -167,6 +171,9 @@ export const en: Dictionary = {
       bikjang: 'Bikjang — the generals face each other',
       quiet: 'No capture for a long time',
       area: 'Counted by area',
+      goatsCaptured: 'Five goats captured',
+      tigersTrapped: 'Every tiger is blocked',
+      goatsTrapped: 'The goats have no move left',
     },
     hints: {
       title: 'AI suggestion',
@@ -224,7 +231,7 @@ export const en: Dictionary = {
     body: [
       {
         h: 'What this site is',
-        p: 'Six traditional games — Gomoku, Reversi, Janggi, chess, shogi and Go — each with a playable board, a tunable AI opponent, and a written guide covering the rules, the core strategic ideas, and the history of the game. There is no account system, no matchmaking queue and no chat.',
+        p: 'Seven traditional games — Gomoku, Reversi, Janggi, chess, shogi, Go and Bagh-Chal — each with a playable board, a tunable AI opponent, and a written guide covering the rules, the core strategic ideas, and the history of the game. There is no account system, no matchmaking queue and no chat.',
       },
       {
         h: 'How the AI works',
@@ -236,7 +243,7 @@ export const en: Dictionary = {
       },
       {
         h: 'Naming and trademarks',
-        p: 'The rules of all six games are traditional and in the public domain. Where a modern trademark exists for a commercial edition of a traditional game, we use the historic generic name instead — most notably Reversi rather than the trademarked "Othello".',
+        p: 'The rules of all seven games are traditional and in the public domain. Where a modern trademark exists for a commercial edition of a traditional game, we use the historic generic name instead — most notably Reversi rather than the trademarked "Othello".',
       },
       {
         h: 'Contact',
@@ -766,6 +773,89 @@ export const en: Dictionary = {
         {
           q: 'How strong is the Go AI here?',
           a: 'It uses Monte-Carlo tree search with random playouts, entirely in your browser and without a neural network. On 9×9 at the highest level it is a reasonable mid-kyu opponent. On 19×19 it is much weaker, because the number of positions to sample grows far faster than the time available.',
+        },
+      ],
+    },
+
+    baghchal: {
+      name: 'Bagh-Chal',
+      aka: 'Goats & Tigers · बाघचाल',
+      tagline: 'Four tigers hunt twenty goats on a 25-point board. Herd them into a corner, or lose one goat too many.',
+      blurb:
+        'An asymmetric hunt game from Nepal: goats try to trap every tiger, tigers try to jump-capture five goats first. Nothing here is fair by design — that is the entire point.',
+      metaTitle: 'Play Bagh-Chal (Goats & Tigers) Online Free vs AI — Rules & Strategy',
+      metaDescription:
+        'Play Bagh-Chal, the Nepali tiger-and-goat hunt game, free against a computer opponent in your browser. Full rules for both sides, four difficulty levels, and a complete strategy and history guide.',
+      keywords: [
+        'bagh chal online',
+        'play bagh chal free',
+        'goats and tigers game',
+        'bagh chal rules',
+        'tiger and goat game online',
+        'nepali board game',
+        'bagh chal strategy',
+      ],
+      rulesTitle: 'How to play Bagh-Chal',
+      rules: [
+        'Bagh-Chal is played on a 5×5 grid of 25 points, connected by straight lines — some orthogonal, some diagonal — the same board pattern as the older Alquerque. Pieces sit on points and move along the drawn lines only.',
+        'Four tigers start on the four corners of the board. The rest of the board is empty. The goat side has 20 goats, but none of them start on the board.',
+        'The goat side moves first. While any goats remain unplaced, a goat turn consists of placing one goat on any empty point instead of moving.',
+        'Tigers move from the very first turn: one step along a line to an empty adjacent point, or a jump straight over one adjacent goat to the empty point immediately beyond it, which captures that goat. Capturing is never compulsory, and a tiger may only capture one goat per move — there is no chain-jumping.',
+        'Once all 20 goats have been placed, the goat side stops placing and starts moving: one step along a line to an empty adjacent point, the same as a tiger’s ordinary step.',
+        'Tigers win the moment they have captured five goats.',
+        'Goats win the moment every tiger is simultaneously unable to move or capture — four tigers fully fenced in, wherever that happens to occur on the board.',
+        'If the same position with the same side to move recurs three times, the game is a draw.',
+      ],
+      strategyTitle: 'Bagh-Chal strategy guide',
+      strategy: [
+        {
+          h: 'Goats: never leave a piece jumpable',
+          p: 'A tiger captures by jumping a goat into an empty point directly beyond it. Before placing or moving a goat, check every line through it: if a tiger sits on one side and the point on the other side is empty, that goat is already lost. Early goats are cheap to lose and expensive to spare — guard the landing squares, not just the goats.',
+        },
+        {
+          h: 'Goats: build a wall, don’t scatter',
+          p: 'Goats that stand next to each other support one another, because a supported goat has no empty landing square behind it in that direction. Isolated goats in the open are the tiger’s easiest targets. Aim to advance as a connected front rather than filling random points.',
+        },
+        {
+          h: 'Tigers: spread out before the goats coordinate',
+          p: 'In the first several moves, goats are placed one at a time and cannot yet support each other. This is the tiger’s only real window of superior mobility — use it to threaten multiple jump lines at once and force an early capture before the goat wall forms.',
+        },
+        {
+          h: 'Tigers: a threatened capture is often worth more than a taken one',
+          p: 'Jumping a goat immediately can walk a tiger into a corner where the goats then fence it in. Sometimes the stronger move is to sit on a square that threatens two different captures, forcing the goat side to give up material or mobility either way.',
+        },
+        {
+          h: 'Both sides: count moves, not just position',
+          p: 'A tiger fully out of moves loses instantly, even mid-board — goats do not need to corral all four tigers into a literal corner, just deny every one of them a step or a jump at the same time. Goats should track each tiger’s remaining escape squares like a countdown; tigers should always keep at least one open line free.',
+        },
+      ],
+      historyTitle: 'The history of Bagh-Chal',
+      history: [
+        'Bagh-Chal — "moving tigers" in Nepali — is the best-known member of a whole family of hunt games found across South and Southeast Asia, in which two sides with genuinely different pieces, different numbers, and different win conditions face off on the same board. Relatives include Aadu Puli Aattam in Tamil Nadu, Rimau-rimau in Malaysia, and Catch the Tiger in Sri Lanka, all built on the same predator-versus-herd idea.',
+        'The board itself is older than the game: it is the same 5×5 lined grid used for Alquerque, a piece-jumping game recorded in the Middle East over a thousand years ago and generally considered an ancestor of draughts (checkers). Bagh-Chal repurposes that board for an asymmetric hunt rather than a symmetric capturing race, which is what makes it stand apart from every other game on this site — chess, janggi, shogi and xiangqi all descend from the symmetric Indian war game chaturanga, while Bagh-Chal belongs to this separate, much older lineage of uneven hunt games.',
+        'The game remains a genuinely popular pastime in Nepal today, traditionally played with goat pellets and pieces of stone or seed on a board scratched into wood, stone or the ground itself — no special equipment required, which is much of why it survived so well outside of formal publishing.',
+      ],
+      faqTitle: 'Bagh-Chal FAQ',
+      faq: [
+        {
+          q: 'Is Bagh-Chal fair — do tigers or goats have the advantage?',
+          a: 'The two sides are built entirely differently, so "fair" is not really the goal. With careful play the goat side is generally considered to have at least an even game and arguably the edge, since a coordinated wall of goats is very hard for four tigers to break without early captures. Weak goat play, on the other hand, loses fast.',
+        },
+        {
+          q: 'Can a tiger jump more than one goat in a single turn?',
+          a: 'No. A tiger move is either one step or exactly one jump-capture. Unlike draughts, there is no rule allowing a tiger to chain several jumps together in one turn.',
+        },
+        {
+          q: 'Is a tiger forced to capture when it can?',
+          a: 'No, capturing is always optional. A tiger can choose a quiet step instead of an available jump — sometimes the right choice, since jumping can walk a tiger into a position the goats can fence in.',
+        },
+        {
+          q: 'What happens if the goat side has no legal move?',
+          a: 'The tigers win immediately. This can only happen after all 20 goats are placed and every goat on the board happens to be boxed in, which is rare but does end the game rather than stalling it.',
+        },
+        {
+          q: 'Why did my game end in a draw?',
+          a: 'Threefold repetition: if the exact same position, with the same side to move, occurs three times, the game is drawn. This mostly shows up in long movement-phase manoeuvring where neither side wants to commit.',
         },
       ],
     },

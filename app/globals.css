@@ -383,6 +383,15 @@ body::after {
     inset 0 -2px 4px rgb(120 105 80 / 0.28);
 }
 
+/** Bagh-Chal tiger token — the goat side reuses .stone-white above. */
+.stone-tiger {
+  background:
+    radial-gradient(circle at 32% 28%, #f2996f 0%, #cf5540 40%, #8a2f22 78%, #5c1c14 100%);
+  box-shadow:
+    0 2px 5px rgb(0 0 0 / 0.55),
+    inset 0 -2px 4px rgb(0 0 0 / 0.3);
+}
+
 @keyframes drop-in {
   from {
     transform: scale(0.55);

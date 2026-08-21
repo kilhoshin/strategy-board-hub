@@ -47,6 +47,7 @@ export const GAME_SLUG: Record<GameId, string> = {
   chess: 'chess',
   shogi: 'shogi',
   go: 'go',
+  baghchal: 'baghchal',
 };
 
 export type StaticPage = 'about' | 'privacy';

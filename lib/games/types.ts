@@ -1,6 +1,14 @@
-export type GameId = 'gomoku' | 'reversi' | 'janggi' | 'chess' | 'shogi' | 'go';
+export type GameId = 'gomoku' | 'reversi' | 'janggi' | 'chess' | 'shogi' | 'go' | 'baghchal';
 
-export const GAME_IDS: GameId[] = ['gomoku', 'reversi', 'janggi', 'chess', 'shogi', 'go'];
+export const GAME_IDS: GameId[] = [
+  'gomoku',
+  'reversi',
+  'janggi',
+  'chess',
+  'shogi',
+  'go',
+  'baghchal',
+];
 
 /** 1 = the side that moves first (black / white-in-chess / Cho / Sente), 2 = the responder. */
 export type Side = 1 | 2;
