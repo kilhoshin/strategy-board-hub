@@ -226,6 +226,92 @@ export function BoardPreview({ game, id }: { game: GameId; id: string }) {
     );
   }
 
+  if (game === 'oware') {
+    const counts = [4, 2, 6, 0, 3, 5, 1, 4, 7, 2, 3, 5];
+    const cell = 84 / 6;
+    const py = (row: number) => 12 + row * (76 - 8);
+    return (
+      <svg {...common}>
+        <Defs id={id} />
+        <rect width="100" height="100" rx="6" fill={`url(#${id}-wood)`} />
+        {counts.map((n, i) => {
+          const row = i < 6 ? 1 : 0;
+          const col = i < 6 ? i : 11 - i;
+          const cx = 8 + col * cell + cell / 2;
+          const cy = py(row);
+          return (
+            <g key={i}>
+              <ellipse cx={cx} cy={cy} rx={cell * 0.42} ry={cell * 0.36} fill="rgba(0,0,0,0.22)" />
+              <text
+                x={cx}
+                y={cy}
+                fontSize="5.5"
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="#f2e3c4"
+                fontWeight="700"
+              >
+                {n}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
+
+  if (game === 'xiangqi') {
+    const cols = 9;
+    const rows = 10;
+    const px = (c: number) => 8 + (c * 84) / (cols - 1);
+    const py = (r: number) => 6 + (r * 88) / (rows - 1);
+    const pieces: [number, number, string, boolean][] = [
+      [8, 4, '帥', false],
+      [1, 4, '將', true],
+      [7, 1, '炮', false],
+      [2, 7, '包', true],
+      [6, 2, '兵', false],
+      [3, 6, '卒', true],
+      [9, 0, '俥', false],
+      [0, 8, '車', true],
+    ];
+    return (
+      <svg {...common}>
+        <Defs id={id} />
+        <rect width="100" height="100" rx="6" fill={`url(#${id}-wood)`} />
+        <rect x={px(0) - 2} y={py(4)} width={px(8) - px(0) + 4} height={py(5) - py(4)} fill="rgba(0,0,0,0.05)" />
+        {Array.from({ length: rows }, (_, r) => (
+          <line key={`r${r}`} x1={px(0)} y1={py(r)} x2={px(8)} y2={py(r)} stroke="rgba(60,35,12,0.5)" strokeWidth="0.5" />
+        ))}
+        {Array.from({ length: cols }, (_, c) => (
+          <line key={`c${c}`} x1={px(c)} y1={py(0)} x2={px(c)} y2={py(9)} stroke="rgba(60,35,12,0.5)" strokeWidth="0.5" />
+        ))}
+        {[0, 7].map((top) => (
+          <g key={top} stroke="rgba(60,35,12,0.5)" strokeWidth="0.5">
+            <line x1={px(3)} y1={py(top)} x2={px(5)} y2={py(top + 2)} />
+            <line x1={px(5)} y1={py(top)} x2={px(3)} y2={py(top + 2)} />
+          </g>
+        ))}
+        {pieces.map(([r, c, ch, black], i) => (
+          <g key={i}>
+            <circle cx={px(c)} cy={py(r)} r="4.6" fill="#f2e3c4" stroke={black ? '#1b1a17' : '#a8321f'} strokeWidth="0.9" />
+            <text
+              x={px(c)}
+              y={py(r)}
+              fontSize="4.6"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill={black ? '#1b1a17' : '#a8321f'}
+              fontWeight="700"
+            >
+              {ch}
+            </text>
+          </g>
+        ))}
+      </svg>
+    );
+  }
+
   if (game === 'baghchal') {
     const bn = 5;
     const px = (i: number) => 8 + (i % bn) * ((100 - 16) / (bn - 1));

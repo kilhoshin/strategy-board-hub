@@ -1,4 +1,13 @@
-export type GameId = 'gomoku' | 'reversi' | 'janggi' | 'chess' | 'shogi' | 'go' | 'baghchal';
+export type GameId =
+  | 'gomoku'
+  | 'reversi'
+  | 'janggi'
+  | 'chess'
+  | 'shogi'
+  | 'go'
+  | 'baghchal'
+  | 'xiangqi'
+  | 'oware';
 
 export const GAME_IDS: GameId[] = [
   'gomoku',
@@ -8,7 +17,40 @@ export const GAME_IDS: GameId[] = [
   'shogi',
   'go',
   'baghchal',
+  'xiangqi',
+  'oware',
 ];
+
+/**
+ * Cultural/historical lineage each game belongs to — drives menu grouping and
+ * category content as the catalogue grows toward other traditions (mancala,
+ * tafl, draughts, ancient race games, ...). Order here is the display order
+ * once a game is added to a culture with 2+ members; see gen-routes.mjs and
+ * scripts/gen-routes.mjs for how GAME_IDS itself feeds routing.
+ */
+export type Culture =
+  | 'go' // Go on its own — no close traditional cousin in the catalogue yet.
+  | 'chaturanga' // Chess-family war games: chess, janggi, shogi, (future) xiangqi, makruk...
+  | 'hunt' // Asymmetric predator-vs-prey games: baghchal, (future) fox & geese...
+  | 'tafl' // Viking/Celtic siege-and-escape games.
+  | 'mancala' // Sowing/count-and-capture games.
+  | 'gonu' // Placement/alignment/blocking games (Korean gonu, nine men's morris...).
+  | 'draughts' // Jump-capture games beyond standard checkers (fanorona, surakarta...).
+  | 'race' // Dice/stick race games (senet, royal game of ur, pachisi...) — needs a
+  // stochastic (expectiminimax-style) engine, not yet supported by bestMove().
+  | 'modern'; // Games without a pre-20th-century lineage: gomoku, reversi.
+
+export const GAME_CULTURE: Record<GameId, Culture> = {
+  go: 'go',
+  chess: 'chaturanga',
+  janggi: 'chaturanga',
+  shogi: 'chaturanga',
+  xiangqi: 'chaturanga',
+  baghchal: 'hunt',
+  gomoku: 'modern',
+  reversi: 'modern',
+  oware: 'mancala',
+};
 
 /** 1 = the side that moves first (black / white-in-chess / Cho / Sente), 2 = the responder. */
 export type Side = 1 | 2;

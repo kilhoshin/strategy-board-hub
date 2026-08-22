@@ -55,6 +55,14 @@ const Games = {
     ssr: false,
     loading: () => <Skeleton label="baghchal" />,
   }),
+  xiangqi: dynamic(() => import('./XiangqiGame').then((m) => m.XiangqiGame), {
+    ssr: false,
+    loading: () => <Skeleton label="xiangqi" />,
+  }),
+  oware: dynamic(() => import('./OwareGame').then((m) => m.OwareGame), {
+    ssr: false,
+    loading: () => <Skeleton label="oware" />,
+  }),
 } as const;
 
 export function GameStage({

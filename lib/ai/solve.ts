@@ -5,6 +5,8 @@ import * as janggi from '../games/janggi';
 import * as shogi from '../games/shogi';
 import * as go from '../games/go';
 import * as baghchal from '../games/baghchal';
+import * as xiangqi from '../games/xiangqi';
+import * as oware from '../games/oware';
 import type { GameId, Level } from '../games/types';
 
 export interface AiRequest {
@@ -37,6 +39,10 @@ export function solve({ game, state, level }: Omit<AiRequest, 'id'>): unknown {
       return go.bestMove(state as go.GoState, level);
     case 'baghchal':
       return baghchal.bestMove(state as baghchal.BaghchalState, level);
+    case 'xiangqi':
+      return xiangqi.bestMove(state as xiangqi.XiangqiState, level);
+    case 'oware':
+      return oware.bestMove(state as oware.OwareState, level);
     default:
       return null;
   }

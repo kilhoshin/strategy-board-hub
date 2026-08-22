@@ -87,7 +87,7 @@ if (SHOTS) await mkdir(SHOT_DIR, { recursive: true });
 
 await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
 check('home renders hero', (await page.locator('h1').first().innerText()).length > 4);
-check('home lists 7 game cards', (await page.locator('#games a[href]').count()) >= 7);
+check('home lists 9 game cards', (await page.locator('#games a[href]').count()) >= 9);
 if (SHOTS) {
   await page.waitForTimeout(2500);
   await page.screenshot({ path: join(SHOT_DIR, 'home.png') });
@@ -129,16 +129,21 @@ const GAMES = [
   { slug: 'go', moves: ['E5'], probe: 'stones', want: 2, hints: true },
   // Goat placement at the centre point (row 3, col 3); the tiger AI answers next.
   { slug: 'baghchal', moves: ['3-3'], probe: 'log', want: 2, hints: false },
+  // Red cannon slides from file b to the centre file (no jump needed).
+  { slug: 'xiangqi', moves: ['23', '53'], probe: 'log', want: 2, hints: true },
+  // Sowing house A1 (4 seeds at the start) is always a legal opening move.
+  // Oware has only 12 pits, well under the >20 threshold every other board clears.
+  { slug: 'oware', moves: ['A1: 4'], probe: 'log', want: 2, hints: true, minButtons: 10 },
 ];
 
-for (const { slug, moves, probe, want, hints } of GAMES) {
+for (const { slug, moves, probe, want, hints, minButtons = 20 } of GAMES) {
   consoleErrors.length = 0;
   await page.goto(`${BASE}/${slug}/`, { waitUntil: 'networkidle' });
 
   // Wait for the deferred board bundle to mount.
   await page.waitForFunction(
-    () => document.querySelectorAll('main button[aria-label]').length > 20,
-    undefined,
+    (min) => document.querySelectorAll('main button[aria-label]').length > min,
+    minButtons,
     { timeout: 20000 },
   );
   check(`${slug}: board mounted`, true);

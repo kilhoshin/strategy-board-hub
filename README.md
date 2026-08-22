@@ -1,8 +1,8 @@
 # Strategy Board Hub
 
-Six abstract strategy games — Gomoku, Reversi, Janggi, chess, shogi and Go — each with a
-playable board and an AI opponent that runs entirely in the browser. No server, no accounts,
-no database. Built as a static export so it can sit on any free static host.
+Nine abstract strategy games — Gomoku, Reversi, Janggi, chess, shogi, Go, Bagh-Chal, Xiangqi
+and Oware — each with a playable board and an AI opponent that runs entirely in the browser.
+No server, no accounts, no database. Built as a static export so it can sit on any free static host.
 
 Implements the plan in [`abstract-strategy-hub-dev-doc.md`](./abstract-strategy-hub-dev-doc.md).
 

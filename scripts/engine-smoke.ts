@@ -6,6 +6,8 @@ import * as janggi from '../lib/games/janggi';
 import * as shogi from '../lib/games/shogi';
 import * as go from '../lib/games/go';
 import * as baghchal from '../lib/games/baghchal';
+import * as xiangqi from '../lib/games/xiangqi';
+import * as oware from '../lib/games/oware';
 import type { Level } from '../lib/games/types';
 
 let failures = 0;
@@ -165,6 +167,44 @@ const LEVEL: Level = 3;
     'baghchal full game',
     o.over,
     `${plies} plies, winner ${o.winner} (${o.reason}), goats captured ${s.goatsCaptured}, worst ${worst}ms`,
+  );
+}
+
+{
+  let s = xiangqi.initial();
+  let worst = 0;
+  let plies = 0;
+  while (!xiangqi.outcome(s).over && plies < 200) {
+    const [m, ms] = timed(() => xiangqi.bestMove(s, LEVEL));
+    worst = Math.max(worst, ms);
+    if (!m) break;
+    s = xiangqi.apply(s, m);
+    plies++;
+  }
+  const o = xiangqi.outcome(s);
+  check(
+    'xiangqi full game',
+    o.over || plies === 200,
+    `${plies} plies, winner ${o.winner} (${o.reason}), worst ${worst}ms`,
+  );
+}
+
+{
+  let s = oware.initial();
+  let worst = 0;
+  let plies = 0;
+  while (!oware.outcome(s).over && plies < 300) {
+    const [m, ms] = timed(() => oware.bestMove(s, LEVEL));
+    worst = Math.max(worst, ms);
+    if (!m) break;
+    s = oware.apply(s, m);
+    plies++;
+  }
+  const o = oware.outcome(s);
+  check(
+    'oware full game',
+    o.over && s.score[0] + s.score[1] === 48,
+    `${plies} plies, winner ${o.winner} (${o.reason}), score ${s.score[0]}-${s.score[1]}, worst ${worst}ms`,
   );
 }
 

@@ -2,11 +2,11 @@ import type { Dictionary } from '../types';
 
 export const en: Dictionary = {
   meta: {
-    siteTagline: 'Seven abstract strategy games. One browser. No sign-up.',
+    siteTagline: 'Nine abstract strategy games. One browser. No sign-up.',
     homeTitle:
-      'Strategy Board Hub — Play Gomoku, Reversi, Chess, Janggi, Shogi, Go & Bagh-Chal vs AI, free',
+      'Strategy Board Hub — Play Gomoku, Reversi, Chess, Janggi, Shogi, Go, Bagh-Chal, Xiangqi & Oware vs AI, free',
     homeDescription:
-      'Free online abstract strategy games with a built-in AI opponent: Gomoku, Reversi, Janggi (Korean chess), chess, shogi, Go and Bagh-Chal (the Nepali tiger-and-goat hunt game). Nothing to install, no account, four difficulty levels, plus full rules and strategy guides.',
+      'Free online abstract strategy games with a built-in AI opponent: Gomoku, Reversi, Janggi (Korean chess), chess, shogi, Go, Bagh-Chal (the Nepali tiger-and-goat hunt game), Xiangqi (Chinese chess) and Oware (the West African mancala game). Nothing to install, no account, four difficulty levels, plus full rules and strategy guides.',
     keywords: [
       'abstract strategy games',
       'play gomoku online free',
@@ -15,6 +15,9 @@ export const en: Dictionary = {
       'shogi against AI',
       'play go 9x9 online',
       'bagh chal online',
+      'xiangqi online free',
+      'oware online free',
+      'mancala vs computer',
       'free board games no download',
     ],
   },
@@ -27,14 +30,14 @@ export const en: Dictionary = {
     skipToGame: 'Skip to the board',
   },
   hero: {
-    eyebrow: 'Seven games · Four difficulties · Zero downloads',
+    eyebrow: 'Nine games · Four difficulties · Zero downloads',
     titleLine1: 'The oldest games',
     titleLine2: 'ever devised',
     subtitle:
-      'Gomoku, Reversi, Janggi, chess, shogi, Go and Bagh-Chal — each with an AI opponent that runs entirely inside your browser. No account, no install, no waiting for a match.',
+      'Gomoku, Reversi, Janggi, chess, shogi, Go, Bagh-Chal, Xiangqi and Oware — each with an AI opponent that runs entirely inside your browser. No account, no install, no waiting for a match.',
     ctaPlay: 'Play Gomoku now',
-    ctaBrowse: 'Browse all seven',
-    stat1: '7',
+    ctaBrowse: 'Browse all nine',
+    stat1: '9',
     stat1Label: 'Complete games',
     stat2: '4',
     stat2Label: 'AI difficulty levels',
@@ -43,7 +46,7 @@ export const en: Dictionary = {
   },
   home: {
     pickEyebrow: 'Choose your board',
-    pickTitle: 'Seven ways to think',
+    pickTitle: 'Nine ways to think',
     pickSubtitle:
       'Every game here is one of pure information: no dice, no hidden cards, no luck. Just a board, a position, and whatever you can see in it.',
     whyEyebrow: 'Why this hub',
@@ -142,10 +145,43 @@ export const en: Dictionary = {
     },
     blockedNote:
       '✕ marks a piece standing in the way. Horses and elephants must walk their first step or two through empty points, so a single blocker shuts down a whole direction.',
+    xiangqiPieces: {
+      general: {
+        name: 'General',
+        move: 'One step along the lines, never diagonally. Never leaves the 3×3 palace.',
+      },
+      advisor: {
+        name: 'Advisor',
+        move: 'One step diagonally, palace only. It exists to shield the general.',
+      },
+      chariot: {
+        name: 'Chariot (Rook)',
+        move: 'Any distance in a straight line, like a rook.',
+      },
+      cannon: {
+        name: 'Cannon',
+        move: 'Slides like a Chariot to move, but must jump exactly one piece — of either colour — to capture.',
+      },
+      horse: {
+        name: 'Horse (Knight)',
+        move: 'One step straight, then one diagonally outward. Blocked if the straight step is occupied.',
+      },
+      elephant: {
+        name: 'Elephant',
+        move: 'Exactly two points diagonally. Blocked if the midpoint is occupied, and can never cross the river.',
+      },
+      soldier: {
+        name: 'Soldier (Pawn)',
+        move: 'One step forward only, until it crosses the river — after that, forward or sideways, never backward.',
+      },
+    },
     playFirst: 'first',
     playSecond: 'second',
     black: 'Black',
     white: 'White',
+    red: 'Red',
+    you: 'You',
+    ai: 'AI',
     cho: 'Cho (楚)',
     han: 'Han (漢)',
     sente: 'Sente',
@@ -170,6 +206,10 @@ export const en: Dictionary = {
       sennichite: 'Repetition (sennichite)',
       bikjang: 'Bikjang — the generals face each other',
       quiet: 'No capture for a long time',
+      noMoves: 'No legal move — blockaded',
+      majority: 'Captured a majority of the seeds',
+      split: 'Split evenly — a draw',
+      exhausted: 'All seeds captured',
       area: 'Counted by area',
       goatsCaptured: 'Five goats captured',
       tigersTrapped: 'Every tiger is blocked',
@@ -231,7 +271,7 @@ export const en: Dictionary = {
     body: [
       {
         h: 'What this site is',
-        p: 'Seven traditional games — Gomoku, Reversi, Janggi, chess, shogi, Go and Bagh-Chal — each with a playable board, a tunable AI opponent, and a written guide covering the rules, the core strategic ideas, and the history of the game. There is no account system, no matchmaking queue and no chat.',
+        p: 'Nine traditional games — Gomoku, Reversi, Janggi, chess, shogi, Go, Bagh-Chal, Xiangqi and Oware — each with a playable board, a tunable AI opponent, and a written guide covering the rules, the core strategic ideas, and the history of the game. There is no account system, no matchmaking queue and no chat.',
       },
       {
         h: 'How the AI works',
@@ -243,7 +283,7 @@ export const en: Dictionary = {
       },
       {
         h: 'Naming and trademarks',
-        p: 'The rules of all seven games are traditional and in the public domain. Where a modern trademark exists for a commercial edition of a traditional game, we use the historic generic name instead — most notably Reversi rather than the trademarked "Othello".',
+        p: 'The rules of all nine games are traditional and in the public domain. Where a modern trademark exists for a commercial edition of a traditional game, we use the historic generic name instead — most notably Reversi rather than the trademarked "Othello".',
       },
       {
         h: 'Contact',
@@ -856,6 +896,172 @@ export const en: Dictionary = {
         {
           q: 'Why did my game end in a draw?',
           a: 'Threefold repetition: if the exact same position, with the same side to move, occurs three times, the game is drawn. This mostly shows up in long movement-phase manoeuvring where neither side wants to commit.',
+        },
+      ],
+    },
+
+    xiangqi: {
+      name: 'Xiangqi',
+      aka: 'Chinese Chess · 象棋 · 中國象棋',
+      tagline: 'A river down the middle, cannons that need a screen, and a general who can never look his enemy in the eye.',
+      blurb:
+        'China’s national chess, and the most widely played board game on Earth. No stalemate escape, no passing — whoever runs out of moves simply loses.',
+      metaTitle: 'Play Xiangqi (Chinese Chess) Online Free vs AI — Rules, Pieces & Strategy',
+      metaDescription:
+        'Play Xiangqi, Chinese chess, free against a computer opponent in your browser. Full rules covering the river, the flying general, cannon screens and more, four difficulty levels, plus a complete strategy and history guide in English.',
+      keywords: [
+        'xiangqi online',
+        'chinese chess online',
+        'play xiangqi free',
+        'xiangqi rules english',
+        'xiangqi vs computer',
+        'chinese chess strategy',
+        '象棋 線上',
+      ],
+      rulesTitle: 'How to play Xiangqi (Chinese chess)',
+      rules: [
+        'Xiangqi is played on the intersections of a board nine files wide and ten ranks deep, split down the middle by a river. Each side has a General, two Advisors, two Elephants, two Horses, two Chariots, two Cannons and five Soldiers. Red moves first.',
+        'The General may never leave the 3×3 palace at its own end of the board, and moves exactly one point orthogonally within it. The Advisor is confined to the same palace and moves one point along its diagonal lines only.',
+        'The Elephant moves exactly two points diagonally and is blocked if the midpoint — its "eye" — is occupied. It can never cross the river, so it only ever defends its own half of the board.',
+        'The Horse moves one point orthogonally then one point diagonally outward, and is blocked if the orthogonal step is occupied — the same "hobbling the leg" rule as in Korean janggi.',
+        'The Chariot (車) moves any distance in a straight line, exactly like a rook.',
+        'The Cannon (炮) moves like a Chariot when it is not capturing, but to capture it must jump exactly one piece — of either colour, including another cannon — landing on the first piece beyond that screen.',
+        'Soldiers (兵/卒) move one point straight forward only, until they cross the river. After crossing, they may also move one point sideways, but never backward.',
+        'The two Generals may never face each other down a completely open file with nothing between them — the "flying general" rule. A move that would create this position is simply illegal, exactly like leaving your own General in check.',
+        'You win by leaving the enemy General with no legal move at all. Unlike international chess there is no stalemate escape: if a side simply has no legal move, whether or not it is in check, that side loses.',
+      ],
+      strategyTitle: 'Xiangqi strategy guide',
+      strategy: [
+        {
+          h: 'The Chariot is the strongest piece on the board',
+          p: 'An open file for a Chariot is worth fighting for from the opening. It attacks and defends from a distance in a way nothing else on this board can, and trading a Chariot for anything less than another Chariot is almost always a loss of material.',
+        },
+        {
+          h: 'Cannons want a screen, not an open line',
+          p: 'A Cannon is dangerous early, when the board is full of potential screens, and gets weaker as pieces are traded off. Look for a friendly Soldier or Horse sitting in front of a Cannon aimed at the enemy palace — that is usually the sharpest attack available.',
+        },
+        {
+          h: 'Elephants and Advisors are your defence, not your attack',
+          p: 'Neither piece can cross the river, so neither can ever take part in an assault on the enemy General. Their entire job is to guard your own palace and the elephant-eye points near it — do not trade them away carelessly just because they look passive.',
+        },
+        {
+          h: 'A Soldier who has crossed the river is worth far more than one who has not',
+          p: 'Before the river, a Soldier can only shuffle forward one square at a time and is easy to ignore. The moment it crosses, it gains sideways movement and becomes a genuine attacking piece, especially near the enemy palace. Push soldiers across early rather than leaving them at home.',
+        },
+        {
+          h: 'Remember there is no stalemate',
+          p: 'Players coming from international chess sometimes try to run the opponent out of moves as a drawing trick. In Xiangqi that is a losing idea for whoever runs dry — leaving your opponent with no legal move at all wins the game outright.',
+        },
+      ],
+      historyTitle: 'The history of Xiangqi',
+      history: [
+        'Xiangqi and Korean janggi share a common ancestor in the Indian game chaturanga, which reached China via Central Asia and had settled into something close to its modern form by the Song dynasty (960–1279 CE). It is by some measures the most widely played board game in the world today, with hundreds of millions of players across China and the Chinese diaspora.',
+        'The board’s central river is named after the Chu–Han Contention of the 3rd century BCE — the war between the rival kingdoms of Chu and Han that followed the collapse of the Qin dynasty. The same conflict gives Korean janggi its two side names, Cho (楚) and Han (漢), even though janggi itself has no river on its board.',
+        'Xiangqi diverged from janggi in several ways that make it the sharper, more attack-oriented game of the two: the river restricts Elephants and Soldiers, Soldiers cannot move sideways until they cross it, Cannons may freely jump or capture other cannons, and there is no passing move — a side that runs out of legal moves loses outright rather than surviving on a technicality.',
+      ],
+      faqTitle: 'Xiangqi FAQ',
+      faq: [
+        {
+          q: 'How is Xiangqi different from Korean chess (janggi)?',
+          a: 'Xiangqi has a river that Elephants and Soldiers cannot cross, and Soldiers only gain sideways movement after crossing it. Cannons in Xiangqi may jump or capture other cannons, which janggi forbids. There is no passing move in Xiangqi, and a side with no legal move simply loses — janggi instead allows a pass, and treats facing generals as an immediate draw rather than an illegal position.',
+        },
+        {
+          q: 'What is the "flying general" rule?',
+          a: 'The two Generals may never end up facing each other down a completely open file. Any move that would create that position is illegal for the player making it — it is checked the same way as leaving your own General in check.',
+        },
+        {
+          q: 'Why can’t my Elephant cross the middle of the board?',
+          a: 'The Elephant is a purely defensive piece in Xiangqi and is not allowed to cross the river at all, regardless of whether the path is otherwise clear. It also cannot jump — if the point at its diagonal midpoint is occupied, it has no legal move in that direction.',
+        },
+        {
+          q: 'Can my Cannon capture another Cannon?',
+          a: 'Yes. Unlike janggi, Xiangqi places no restriction on a Cannon using another Cannon as its jumping screen, or on capturing an enemy Cannon that way.',
+        },
+        {
+          q: 'What happens if I simply have no legal move?',
+          a: 'You lose immediately, whether or not you were in check. There is no stalemate draw in Xiangqi — running your opponent out of moves is a winning plan, not a way to escape a bad position.',
+        },
+      ],
+    },
+
+    oware: {
+      name: 'Oware',
+      aka: 'Awari · Mancala',
+      tagline: 'Twelve houses, forty-eight seeds, and a capture rule that turns simple counting into a minefield.',
+      blurb:
+        'A West African sowing game older than chess. Pick up a house full of seeds, sow them one by one around the board, and try to leave the last one in an enemy house holding two or three.',
+      metaTitle: 'Play Oware (Mancala / Awari) Online Free vs AI — Rules & Strategy',
+      metaDescription:
+        'Play Oware, the West African mancala sowing game, free against a computer opponent in your browser. Full rules including the capture chain and the grand slam restriction, four difficulty levels, plus a complete strategy and history guide.',
+      keywords: [
+        'oware online',
+        'awari online',
+        'mancala vs computer',
+        'play oware free',
+        'oware rules',
+        'west african board game',
+        'oware strategy',
+      ],
+      rulesTitle: 'How to play Oware',
+      rules: [
+        'Oware is played on twelve houses arranged in a ring, six per side, each starting with four seeds — forty-eight seeds in total. You move first.',
+        'On your turn, pick any one of your own houses that has at least one seed, and pick up every seed in it. Sowing them one at a time into each following house around the ring — your own houses, then your opponent’s, in order — skipping only the house you started from.',
+        'If the very last seed you sow lands in an opponent’s house and brings its count to exactly two or three, you capture every seed in it. Then check the house immediately before that one, in the direction you were sowing: if it is also an opponent’s house sitting at two or three, capture it too, and keep walking backward as long as the chain holds.',
+        'A capture is refused — the seeds simply stay on the board — if taking it would leave every single one of your opponent’s houses empty. You may never sweep your opponent’s whole row on a single move.',
+        'If your opponent has no seeds anywhere on their side, you must play a move that gives them at least one, if any of your houses can reach that far. This "must feed" rule only restricts you when a feeding move actually exists.',
+        'The game ends the instant either side has captured twenty-five or more seeds — an unassailable majority — or when a side’s houses are empty at the start of their turn and the other side has no seeds left to give them, at which point that other side captures everything remaining on their own side of the board.',
+        'Whoever has captured more seeds when the game ends wins. Twenty-four apiece is a draw.',
+      ],
+      strategyTitle: 'Oware strategy guide',
+      strategy: [
+        {
+          h: 'Never leave your own houses sitting at one or two seeds',
+          p: 'A house with one or two seeds is a single sow away from becoming exactly two or three — and an easy capture for your opponent. Before you move, check whether it hands your opponent a house at the magic number, on either side of the board, since captures chain backward.',
+        },
+        {
+          h: 'Build toward the far end of your row',
+          p: 'Houses near the end of your row (closest to your opponent’s side) reach into enemy territory with fewer seeds, making them your sharpest attacking tools. Houses near the start of your row take a full lap to threaten anything and are safer to hoard seeds in.',
+        },
+        {
+          h: 'A big house is a loaded weapon — and a target',
+          p: 'A house with ten or more seeds sows all the way around the board and can set up a multi-house capture chain in one move. But it also takes a long time to become dangerous again after you play it, so timing matters more than raw seed count.',
+        },
+        {
+          h: 'Watch for the grand slam rule both ways',
+          p: 'You cannot legally empty every one of your opponent’s houses in one move — the capture is simply cancelled and the seeds stay put. Sometimes the right defensive idea is to arrange your own row so that your opponent’s only capturing move would trigger exactly this refusal.',
+        },
+        {
+          h: 'Counting beats guessing',
+          p: 'Oware has no hidden information and no luck — every capture is fully calculable before you move. Count forward from the house you are considering: which house does the last seed land in, and what does that house hold right now? Strong play is mostly just doing this arithmetic more reliably than your opponent.',
+        },
+      ],
+      historyTitle: 'The history of Oware',
+      history: [
+        'Oware belongs to the mancala family, a huge group of sowing-and-capturing games found across Africa, the Middle East, and parts of Asia, whose common thread is picking up seeds from one hollow and distributing them around a set of others. Boards carved into ancient stone in East Africa and the Middle East suggest the family is at least as old as the Egyptian game senet, and quite possibly older — mancala games leave almost no other archaeological trace, since a board can be scooped into bare earth with a stick.',
+        'Oware specifically comes from the Akan peoples of West Africa, in what is now Ghana and Ivory Coast; the name itself is Akan for "he marries" or "he moves", tied to a folk story about a couple who supposedly played the very first game to settle which of them would remarry. Closely related sowing games under other names — Ayo in Nigeria, Adi in Ghana — share the same core mechanics with only minor regional variation.',
+        'The game travelled with the Atlantic slave trade to the Caribbean and the Americas, where it survives today as Warri in places like Antigua and Barbados. It remains a serious competitive game in West Africa, with national and international Oware championships, and it was also one of the very first traditional board games to be solved by computer — Oware was proven to be a first-player win in 2002, decades after chess and checkers programs had already reached grandmaster strength but long before anyone attempted a full mancala solution.',
+      ],
+      faqTitle: 'Oware FAQ',
+      faq: [
+        {
+          q: 'What is the difference between Oware, Awari and Mancala?',
+          a: 'Mancala is the name for the whole family of sowing games — there are dozens, including Bao, Kalah and Toguz Korgool, with real rule differences between them. Oware and Awari are two names for essentially the same game, from the Akan and neighbouring Yoruba traditions respectively; the rules implemented here are Oware’s.',
+        },
+        {
+          q: 'Why didn’t my last seed capture anything?',
+          a: 'A capture only happens if the very last seed you sow lands in an opponent’s house and brings it to exactly two or three. If it lands in one of your own houses, or in an opponent’s house that ends up with any other count, nothing is captured.',
+        },
+        {
+          q: 'Why was my capture refused even though the houses were at two or three?',
+          a: 'That is the grand slam rule: a capture that would leave every one of your opponent’s houses empty is not allowed. The seeds stay exactly where they landed, and play continues normally.',
+        },
+        {
+          q: 'What happens if I run out of seeds on my side?',
+          a: 'If it becomes your turn and every one of your houses is empty, the game ends there and your opponent captures every seed remaining on their own side of the board.',
+        },
+        {
+          q: 'Is capturing ever forced?',
+          a: 'No — you simply play whichever of your own houses you like, seeds permitting, and a capture happens automatically if the position allows it. The only restriction on your choice of house is the "must feed" rule when your opponent’s side is completely empty.',
         },
       ],
     },

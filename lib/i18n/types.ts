@@ -112,10 +112,20 @@ export interface Dictionary {
     >;
     /** Explains the ✕ markers drawn on a blocked horse/elephant leg. */
     blockedNote: string;
+    /** Xiangqi's own piece legend — its General/Advisor/Elephant/Cannon/Soldier
+     * move differently enough from Janggi's that the text cannot be shared. */
+    xiangqiPieces: Record<
+      'general' | 'advisor' | 'chariot' | 'cannon' | 'horse' | 'elephant' | 'soldier',
+      { name: string; move: string }
+    >;
     playFirst: string;
     playSecond: string;
     black: string;
     white: string;
+    red: string;
+    /** Generic side labels for games with no traditional colour identity (e.g. Oware). */
+    you: string;
+    ai: string;
     cho: string;
     han: string;
     sente: string;

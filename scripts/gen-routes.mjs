@@ -15,7 +15,7 @@ const LOCALES = [
   { code: 'zh', prefix: 'zh' },
 ];
 
-const GAME_SLUGS = ['gomoku', 'reversi', 'janggi', 'chess', 'shogi', 'go', 'baghchal'];
+const GAME_SLUGS = ['gomoku', 'reversi', 'janggi', 'chess', 'shogi', 'go', 'baghchal', 'xiangqi', 'oware'];
 
 /** Games with a puzzle set — see scripts/import-chess-puzzles.ts / scripts/gen-puzzles.ts. */
 const PUZZLE_SLUGS = ['chess', 'janggi', 'shogi'];
