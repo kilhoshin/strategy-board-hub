@@ -19,6 +19,7 @@ import { Header } from '@/components/site/Header';
 import { GameView } from '@/components/views/GameView';
 import { HomeView } from '@/components/views/HomeView';
 import { PuzzleView } from '@/components/views/PuzzleView';
+import { CONTACT_EMAIL } from '@/lib/i18n/config';
 import { StaticView } from '@/components/views/StaticView';
 
 /* --------------------------------- shell --------------------------------- */
@@ -198,6 +199,45 @@ export function PrivacyPage({ locale }: { locale: Locale }) {
       updated={dict.privacy.updated}
       body={dict.privacy.body}
     />
+  );
+}
+
+export function termsMetadata(locale: Locale): Metadata {
+  const dict = getDictionary(locale);
+  return pageMetadata({
+    locale,
+    sub: 'terms',
+    title: `${dict.terms.title} | ${dict.meta.siteTagline}`,
+    description: dict.terms.body[0]?.p ?? dict.meta.siteTagline,
+  });
+}
+
+export function TermsPage({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  return <StaticView title={dict.terms.title} updated={dict.terms.updated} body={dict.terms.body} />;
+}
+
+export function contactMetadata(locale: Locale): Metadata {
+  const dict = getDictionary(locale);
+  return pageMetadata({
+    locale,
+    sub: 'contact',
+    title: `${dict.contact.title} | ${dict.meta.siteTagline}`,
+    description: dict.contact.intro,
+  });
+}
+
+export function ContactPage({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  return (
+    <StaticView title={dict.contact.title} intro={dict.contact.intro} body={dict.contact.body}>
+      <p className="mt-6 text-lg">
+        <span className="text-[var(--fg-muted)]">{dict.contact.emailLabel}: </span>
+        <a href={`mailto:${CONTACT_EMAIL}`} className="text-[var(--accent)] underline underline-offset-4">
+          {CONTACT_EMAIL}
+        </a>
+      </p>
+    </StaticView>
   );
 }
 

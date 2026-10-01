@@ -52,7 +52,10 @@ export const GAME_SLUG: Record<GameId, string> = {
   oware: 'oware',
 };
 
-export type StaticPage = 'about' | 'privacy';
+export type StaticPage = 'about' | 'privacy' | 'terms' | 'contact';
+
+/** Public contact address shown on the Contact page. */
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'kylo.sheen@gmail.com';
 
 /** Builds a site-relative path: '/', '/gomoku', '/ko', '/ko/gomoku'. */
 export function localePath(locale: Locale, sub = ''): string {

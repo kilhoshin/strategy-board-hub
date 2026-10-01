@@ -186,6 +186,14 @@ export function HomeView({ locale, dict }: { locale: Locale; dict: Dictionary })
               <Link href={localePath(locale, 'privacy')} className="hover:text-[var(--accent)]">
                 {dict.nav.privacy}
               </Link>
+              <span className="mx-2 opacity-40">·</span>
+              <Link href={localePath(locale, 'terms')} className="hover:text-[var(--accent)]">
+                {dict.nav.terms}
+              </Link>
+              <span className="mx-2 opacity-40">·</span>
+              <Link href={localePath(locale, 'contact')} className="hover:text-[var(--accent)]">
+                {dict.nav.contact}
+              </Link>
             </p>
           </div>
         </Reveal>

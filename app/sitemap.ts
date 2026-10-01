@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PUZZLE_GAMES.map((g) => `${GAME_SLUG[g]}/puzzles`),
     'about',
     'privacy',
+    'terms',
+    'contact',
   ];
   const entries: MetadataRoute.Sitemap = [];
 
@@ -20,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: absoluteUrl(localePath(locale, sub)),
         lastModified: new Date(),
         changeFrequency: sub === '' ? 'weekly' : 'monthly',
-        priority: sub === '' ? 1 : sub === 'about' || sub === 'privacy' ? 0.3 : 0.8,
+        priority: sub === '' ? 1 : ['about', 'privacy', 'terms', 'contact'].includes(sub) ? 0.3 : 0.8,
         alternates: { languages: alternates(sub) },
       });
     }

@@ -1,4 +1,5 @@
 import { Reveal } from '@/components/site/Reveal';
+import type { ReactNode } from 'react';
 import type { StrategyItem } from '@/lib/i18n/types';
 
 export function StaticView({
@@ -6,11 +7,13 @@ export function StaticView({
   intro,
   updated,
   body,
+  children,
 }: {
   title: string;
   intro?: string;
   updated?: string;
   body: StrategyItem[];
+  children?: ReactNode;
 }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
@@ -22,6 +25,7 @@ export function StaticView({
         {intro && (
           <p className="mt-6 text-lg leading-relaxed text-[var(--fg-muted)]">{intro}</p>
         )}
+        {children}
       </Reveal>
 
       <div className="rule my-12" />

@@ -178,6 +178,18 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             >
               {dict.nav.privacy}
             </Link>
+            <Link
+              href={localePath(locale, 'terms')}
+              className="rounded-lg px-3 py-2.5 text-sm text-[var(--fg-muted)]"
+            >
+              {dict.nav.terms}
+            </Link>
+            <Link
+              href={localePath(locale, 'contact')}
+              className="rounded-lg px-3 py-2.5 text-sm text-[var(--fg-muted)]"
+            >
+              {dict.nav.contact}
+            </Link>
           </nav>
         </div>
       )}

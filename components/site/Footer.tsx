@@ -54,6 +54,22 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                   {dict.nav.privacy}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href={localePath(locale, 'terms')}
+                  className="text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--accent)]"
+                >
+                  {dict.nav.terms}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={localePath(locale, 'contact')}
+                  className="text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--accent)]"
+                >
+                  {dict.nav.contact}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

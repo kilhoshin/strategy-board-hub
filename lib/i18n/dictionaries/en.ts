@@ -25,6 +25,8 @@ export const en: Dictionary = {
     games: 'Games',
     about: 'About',
     privacy: 'Privacy',
+    terms: 'Terms',
+    contact: 'Contact',
     language: 'Language',
     theme: 'Toggle theme',
     skipToGame: 'Skip to the board',
@@ -318,6 +320,71 @@ export const en: Dictionary = {
       {
         h: 'Changes',
         p: 'If this policy changes, the revised version will be posted on this page with an updated date.',
+      },
+    ],
+  },
+  terms: {
+    title: 'Terms of Service',
+    updated: 'Last updated: 1 October 2026',
+    body: [
+      {
+        h: 'Acceptance',
+        p: 'By using Strategy Board Hub you agree to these terms. If you do not agree, please do not use the site.',
+      },
+      {
+        h: 'What the site offers',
+        p: 'Strategy Board Hub provides free, browser-based abstract strategy games played against a computer opponent, together with articles on rules, strategy and history. No account is required.',
+      },
+      {
+        h: 'Acceptable use',
+        p: 'You may use the site for personal, non-commercial play and learning. Please do not attempt to disrupt the site, scrape it at a rate that burdens it, or reverse-engineer it to pass off our content as your own.',
+      },
+      {
+        h: 'Content and ownership',
+        p: 'The text, design and code of this site belong to its operator. The games themselves are traditional and belong to everyone. You may quote short excerpts with a link back to the page they came from.',
+      },
+      {
+        h: 'No warranty',
+        p: 'The site and its AI opponents are provided “as is”, without warranty of any kind. AI moves and hints can be wrong, and we do not guarantee that the site will always be available or free of errors.',
+      },
+      {
+        h: 'Limitation of liability',
+        p: 'To the extent permitted by law, the operator is not liable for any loss or damage arising from your use of the site.',
+      },
+      {
+        h: 'Advertising and third-party links',
+        p: 'The site displays ads served by Google AdSense and may link to other websites. We do not control third-party sites and are not responsible for their content or practices. See the Privacy Policy for how advertising works.',
+      },
+      {
+        h: 'Changes',
+        p: 'We may update these terms from time to time. The revised version will be posted on this page with a new date, and continued use of the site means you accept it.',
+      },
+      {
+        h: 'Contact',
+        p: 'Questions about these terms can be sent through the Contact page.',
+      },
+    ],
+  },
+  contact: {
+    title: 'Contact Us',
+    intro: 'Questions, bug reports, a rules correction, or a game you would like to see added — we read every message.',
+    emailLabel: 'Email',
+    body: [
+      {
+        h: 'Bug reports',
+        p: 'If a move was rejected that should be legal, or the AI misbehaved, tell us the game, the difficulty and the move sequence if you remember it. Your browser and device help too.',
+      },
+      {
+        h: 'Corrections and suggestions',
+        p: 'Spotted a mistake in a rules explanation, a translation or a historical note? Or want a new game or feature? Send it over.',
+      },
+      {
+        h: 'Advertising and privacy requests',
+        p: 'For questions about advertising or your data, see the Privacy Policy first, then write to us if you need more.',
+      },
+      {
+        h: 'Response time',
+        p: 'This is a small independent site, so replies usually take a few days.',
       },
     ],
   },

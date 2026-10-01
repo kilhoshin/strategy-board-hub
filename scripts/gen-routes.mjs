@@ -125,6 +125,33 @@ export default function Page() {
 }
 `,
   );
+  write(
+    `${base}/terms/page.tsx`,
+    `
+${banner}
+import { TermsPage, termsMetadata } from '@/components/pages';
+
+export const metadata = termsMetadata('${code}');
+
+export default function Page() {
+  return <TermsPage locale="${code}" />;
+}
+`,
+  );
+
+  write(
+    `${base}/contact/page.tsx`,
+    `
+${banner}
+import { ContactPage, contactMetadata } from '@/components/pages';
+
+export const metadata = contactMetadata('${code}');
+
+export default function Page() {
+  return <ContactPage locale="${code}" />;
+}
+`,
+  );
 }
 
 console.log('\nRoute files generated.');

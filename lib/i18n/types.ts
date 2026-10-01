@@ -44,6 +44,8 @@ export interface Dictionary {
     games: string;
     about: string;
     privacy: string;
+    terms: string;
+    contact: string;
     language: string;
     theme: string;
     skipToGame: string;
@@ -200,6 +202,17 @@ export interface Dictionary {
   privacy: {
     title: string;
     updated: string;
+    body: StrategyItem[];
+  };
+  terms: {
+    title: string;
+    updated: string;
+    body: StrategyItem[];
+  };
+  contact: {
+    title: string;
+    intro: string;
+    emailLabel: string;
     body: StrategyItem[];
   };
   games: Record<GameId, GameContent>;
