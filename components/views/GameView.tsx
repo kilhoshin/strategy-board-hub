@@ -1,6 +1,7 @@
 ﻿import { Link } from '@/components/site/Link';
 import { GAME_IDS, type GameId } from '@/lib/games/types';
 import { PUZZLE_GAMES, type Locale, gamePath, puzzlePath } from '@/lib/i18n/config';
+import { LEARN, LEARN_TITLE } from '@/lib/i18n/learn';
 import type { Dictionary } from '@/lib/i18n/types';
 import { AdSlot } from '@/components/site/AdSlot';
 import { BoardPreview } from '@/components/site/BoardPreview';
@@ -17,12 +18,14 @@ export function GameView({
   game: GameId;
 }) {
   const c = dict.games[game];
+  const learn = LEARN[locale][game];
   const others = GAME_IDS.filter((g) => g !== game);
   const hubHref = `${gamePath(locale, game)}#more`;
 
   const toc = [
     { id: 'rules', label: c.rulesTitle },
     { id: 'strategy', label: c.strategyTitle },
+    { id: 'learn', label: LEARN_TITLE[locale] },
     { id: 'history', label: c.historyTitle },
     { id: 'faq', label: c.faqTitle },
   ];
@@ -129,6 +132,22 @@ export function GameView({
               <h2>{c.strategyTitle}</h2>
               <div className="mt-6 space-y-7">
                 {c.strategy.map((item, i) => (
+                  <div key={i} className="border-l-2 border-[var(--hairline-strong)] pl-5">
+                    <h3 className="!mt-0">{item.h}</h3>
+                    <p>{item.p}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <div className="rule my-14" />
+
+          <Reveal as="section">
+            <div id="learn" className="scroll-mt-24">
+              <h2>{LEARN_TITLE[locale]}</h2>
+              <div className="mt-6 space-y-7">
+                {learn.map((item, i) => (
                   <div key={i} className="border-l-2 border-[var(--hairline-strong)] pl-5">
                     <h3 className="!mt-0">{item.h}</h3>
                     <p>{item.p}</p>
