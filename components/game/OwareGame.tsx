@@ -15,6 +15,7 @@ import {
   SidePicker,
   StatusBar,
 } from './shell';
+import { OwareSeeds } from './OwareSeeds';
 import { useMatch } from './useMatch';
 
 const TOTAL_SEEDS = 48;
@@ -76,13 +77,21 @@ export function OwareGame({ dict, hubHref }: { dict: Dictionary; hubHref: string
         }}
       >
         <span
-          className={`board-wood relative flex h-[86%] w-[86%] items-center justify-center rounded-full border-2 transition-transform duration-200 ${
+          className={`relative flex h-[86%] w-[86%] items-center justify-center rounded-full border-2 transition-transform duration-200 ${
             clickable
               ? 'cursor-pointer border-[var(--color-gold-400)]/70 hover:-translate-y-1'
-              : 'cursor-default border-[var(--hairline)] opacity-90'
+              : 'cursor-default border-[var(--hairline)]'
           }`}
+          style={{
+            background:
+              'radial-gradient(circle at 50% 38%, rgb(28 17 7 / 0.62), rgb(60 38 16 / 0.38) 75%)',
+            boxShadow: 'inset 0 7px 14px rgb(0 0 0 / 0.45), inset 0 -2px 4px rgb(255 255 255 / 0.1)',
+          }}
         >
-          <span className="display text-lg sm:text-2xl">{state.board[i]}</span>
+          <OwareSeeds count={state.board[i]} seed={i} />
+          <span className="absolute left-[8%] top-[4%] rounded-full bg-black/45 px-1.5 text-[0.6rem] font-semibold tabular-nums text-[#f2ead8] sm:text-xs">
+            {state.board[i]}
+          </span>
           {isLast && (
             <span className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-[var(--color-vermilion-500)]/70" />
           )}

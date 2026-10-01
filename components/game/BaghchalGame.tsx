@@ -12,6 +12,7 @@ import {
   SidePicker,
   StatusBar,
 } from './shell';
+import { GoatGlyph, TigerGlyph } from './BaghchalPieces';
 import { useMatch } from './useMatch';
 
 const N = 5;
@@ -156,11 +157,13 @@ export function BaghchalGame({ dict, hubHref }: { dict: Dictionary; hubHref: str
                   )}
                   {v !== 0 ? (
                     <span
-                      className={`placed relative z-10 block h-[68%] w-[68%] rounded-full ${
+                      className={`placed relative z-10 block h-[68%] w-[68%] rounded-full p-[10%] ${
                         v === 1 ? 'stone-white' : 'stone-tiger'
                       } ${selected ? 'ring-4 ring-[var(--color-gold-400)]' : ''}`}
                       style={{ margin: '16%' }}
-                    />
+                    >
+                      {v === 1 ? <GoatGlyph /> : <TigerGlyph />}
+                    </span>
                   ) : (
                     target && (
                       <span
